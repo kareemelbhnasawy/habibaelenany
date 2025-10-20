@@ -33,6 +33,10 @@
   }
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-ink);
@@ -40,6 +44,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 /* Subtle paper texture */
@@ -188,4 +197,44 @@ html {
 /* Lightbox overrides */
 .yarl__root {
   --yarl__color_backdrop: rgba(18, 18, 18, 0.95);
+  z-index: 1000000;
+}
+
+/* Custom caption overlay */
+.lightbox-custom-caption {
+  z-index: 1000001 !important;
+}
+
+/* Lightbox caption styling */
+.yarl__caption_container {
+  background: linear-gradient(to top, rgba(18, 18, 18, 0.9) 0%, rgba(18, 18, 18, 0.7) 50%, transparent 100%);
+  padding: 2rem 1.5rem 1.5rem;
+}
+
+.yarl__caption_title {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.yarl__caption_description {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .yarl__caption_container {
+    padding: 3rem 2rem 2rem;
+  }
+
+  .yarl__caption_title {
+    font-size: 1.125rem;
+  }
+
+  .yarl__caption_description {
+    font-size: 1rem;
+  }
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -34,6 +35,11 @@ function SEO({ title, description }: { title?: string; description?: string }) {
 
 function AnimatedRoutes() {
   const location = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">
@@ -96,14 +102,10 @@ function App() {
     <HelmetProvider>
       <BrowserRouter>
         <LightboxProvider>
-          <div className="relative min-h-screen flex flex-col">
-            <Navbar />
-            <div className="flex-1">
-              <AnimatedRoutes />
-            </div>
-            <Footer />
-            <FloatingContactBubble />
-          </div>
+          <Navbar />
+          <AnimatedRoutes />
+          <Footer />
+          <FloatingContactBubble />
         </LightboxProvider>
       </BrowserRouter>
     </HelmetProvider>

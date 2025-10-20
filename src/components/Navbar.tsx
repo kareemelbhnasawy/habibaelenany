@@ -37,21 +37,16 @@ export function Navbar() {
       )}
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-10 md:h-12">
           {/* Logo */}
           <Link
             to="/"
-            className="focus-ring rounded-lg"
+            className="focus-ring rounded-lg flex items-center"
             aria-label="Home"
           >
-            <div className="text-center">
-              <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight">
-                HABIBA
-              </h1>
-              <p className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-muted">
-                Photography
-              </p>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none -mt-1 md:-mt-1.5">
+              HABIBA
+            </h1>
           </Link>
 
           {/* Desktop Navigation */}

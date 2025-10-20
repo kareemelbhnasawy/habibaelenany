@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MapPin, Mail } from 'lucide-react';
 import { HeroCarousel } from '../components/HeroCarousel';
 import { HighlightsCarousel } from '../components/HighlightsCarousel';
@@ -10,46 +10,65 @@ import { Section } from '../components/Section';
 import { siteConfig } from '../data/site';
 
 export function Home() {
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
-
   return (
-    <main className="min-h-screen">
-      {/* Hero Split Section */}
-      <section className="relative min-h-[90vh] md:min-h-screen pt-16 md:pt-20">
-        <div className="container mx-auto h-full">
-          <div className="grid lg:grid-cols-2 gap-0 lg:gap-8 h-full">
-            {/* Left: Carousel */}
-            <motion.div
-              style={{ y: heroY }}
-              className="relative h-[50vh] lg:h-auto lg:min-h-[600px] order-1 lg:order-1 rounded-none lg:rounded-2xl overflow-hidden"
-            >
-              <HeroCarousel />
-            </motion.div>
+    <main>
+      {/* Hero Full-Screen Section */}
+      <section className="relative min-h-screen flex items-end">
+        {/* Full-screen Carousel Background - completely non-interactive */}
+        <div className="absolute inset-0 pointer-events-none select-none -z-10">
+          <HeroCarousel />
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink/70" />
+        </div>
 
-            {/* Right: Content */}
-            <div className="flex items-center order-2 lg:order-2 py-12 lg:py-0">
-              <div className="w-full max-w-xl mx-auto lg:mx-0">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
-                >
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold mb-6 text-balance leading-tight">
-                    {siteConfig.photographer.tagline}
-                  </h2>
+        {/* Content Overlay */}
+        <div className="relative w-full pb-16 md:pb-20 lg:pb-24 pt-24 md:pt-32">
+          <div className="container mx-auto">
+            <div className="max-w-3xl">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="text-white"
+              >
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-semibold mb-6 text-balance leading-tight drop-shadow-lg">
+                  {siteConfig.photographer.tagline}
+                </h1>
 
-                  <p className="text-base md:text-lg text-muted mb-8 leading-relaxed">
-                    {siteConfig.photographer.bio}
-                  </p>
+                <p className="text-base md:text-lg lg:text-xl text-white/90 mb-8 leading-relaxed max-w-2xl drop-shadow-md">
+                  {siteConfig.photographer.bio}
+                </p>
 
+                {/* Details Row */}
+                <div className="mb-8 flex flex-wrap gap-4 md:gap-6">
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2">
+                    <div className="w-2 h-2 rounded-full bg-green-400" />
+                    <span className="text-sm text-white/90">
+                      {siteConfig.photographer.availability}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2">
+                    <MapPin className="w-4 h-4 text-white/90" />
+                    <span className="text-sm text-white/90">{siteConfig.photographer.location}</span>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href={`mailto:${siteConfig.contact.email}`}
+                    className="btn bg-white text-ink hover:bg-white/90 shadow-xl"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Book a shoot
+                  </a>
                   <Link
                     to="/photography"
-                    className="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition-colors font-medium group focus-ring rounded-lg"
+                    className="btn bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-xl"
                   >
                     <span>About me</span>
                     <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      className="w-4 h-4 ml-2"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -57,32 +76,8 @@ export function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
-
-                  {/* Details Row */}
-                  <div className="mt-12 pt-8 border-t border-ink/10 flex flex-wrap gap-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      <span className="text-sm text-muted">
-                        {siteConfig.photographer.availability}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm">{siteConfig.photographer.location}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-6">
-                    <a
-                      href={`mailto:${siteConfig.contact.email}`}
-                      className="btn btn-primary"
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Book a shoot
-                    </a>
-                  </div>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -94,8 +89,8 @@ export function Home() {
           <HighlightsCarousel />
 
           <div className="mt-12 text-center">
-            <Link to="/photography" className="btn btn-secondary">
-              See all work
+            <Link to="/photography" className="btn btn-secondary !rounded-none">
+              View all
               <svg
                 className="w-4 h-4 ml-2"
                 fill="none"
@@ -159,19 +154,20 @@ export function Home() {
               >
                 <Link
                   to={`/photography?category=${category.name}`}
-                  className="group block relative aspect-[3/4] rounded-lg overflow-hidden focus-ring"
+                  className="group block relative aspect-[3/4] rounded-lg overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform"
                 >
                   <img
                     src={category.image}
                     alt={`${category.name} photography`}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute inset-0 flex items-end p-8">
-                    <h3 className="text-white font-display text-2xl md:text-3xl font-semibold">
-                      {category.name}
-                    </h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 flex items-end p-8">
+                      <h3 className="text-white font-display text-2xl md:text-3xl font-semibold">
+                        {category.name}
+                      </h3>
+                    </div>
                   </div>
                   <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all rounded-lg" />
                 </Link>

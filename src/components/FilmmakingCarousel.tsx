@@ -84,19 +84,19 @@ export function FilmmakingCarousel() {
               className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
             >
               <div
-                className="group relative aspect-video rounded-lg overflow-hidden cursor-pointer bg-ink/5"
+                className="group relative aspect-video rounded-lg overflow-hidden cursor-pointer bg-ink/5 touch-manipulation active:scale-[0.98] transition-transform"
                 onClick={() => openLightbox(filmmakingPhotos, index)}
               >
                 {/* Image */}
                 <img
                   src={photo.src}
                   alt={photo.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                   loading="lazy"
                 />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* Overlay - tap on mobile, hover on desktop */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     {photo.title && (
                       <h3 className="text-white font-display text-lg md:text-xl font-semibold mb-1">

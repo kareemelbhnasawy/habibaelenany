@@ -4,9 +4,11 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { highlights } from '../data/highlights';
 import { photos } from '../data/photos';
+import { useLightbox } from './LightboxProvider';
 import { cn } from '../utils/cn';
 
 export function HighlightsCarousel() {
+  const { openLightbox } = useLightbox();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     slidesToScroll: 1,
@@ -28,6 +30,9 @@ export function HighlightsCarousel() {
     const photo = photos.find(p => p.id === h.photoId);
     return { ...h, photo };
   }).filter(h => h.photo);
+
+  // Create array of photos for lightbox
+  const lightboxPhotos = highlightPhotos.map(h => h.photo!);
 
   return (
     <div className="relative">
@@ -84,32 +89,29 @@ export function HighlightsCarousel() {
               transition={{ delay: index * 0.1 }}
               className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
             >
-              <div className="group relative aspect-[3/4] rounded-lg overflow-hidden cursor-pointer">
+              <div
+                className="group relative aspect-[3/4] rounded-lg overflow-hidden cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
+                onClick={() => openLightbox(lightboxPhotos, index)}
+              >
                 {/* Image */}
                 <img
                   src={highlight.photo!.src}
                   alt={highlight.photo!.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                   loading="lazy"
                 />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-                {/* Content */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
+                {/* Overlay - tap on mobile, hover on desktop */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                  {/* Content */}
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <span className="inline-block px-3 py-1 rounded-full bg-accent/90 text-white text-xs font-medium mb-3">
                       {highlight.category}
                     </span>
                     <h3 className="text-white font-display text-xl md:text-2xl font-semibold">
                       {highlight.title}
                     </h3>
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Hover effect */}

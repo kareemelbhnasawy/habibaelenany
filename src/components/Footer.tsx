@@ -11,14 +11,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Brand */}
           <div>
-            <div className="mb-4">
-              <h3 className="text-xl font-display font-semibold tracking-tight">
-                HABIBA
-              </h3>
-              <p className="text-xs tracking-[0.3em] uppercase text-muted">
-                Photography
-              </p>
-            </div>
+            <h3 className="text-xl font-display font-semibold tracking-tight mb-4">
+              HABIBA
+            </h3>
             <p className="text-sm text-muted max-w-xs">
               {siteConfig.photographer.tagline}
             </p>

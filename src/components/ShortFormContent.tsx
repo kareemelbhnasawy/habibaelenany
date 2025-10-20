@@ -41,7 +41,7 @@ export function ShortFormContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className="group relative cursor-pointer"
+            className="group relative cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
             onClick={() => openLightbox(shortFormPhotos, index)}
           >
             {/* Vertical aspect ratio for short form content */}
@@ -49,12 +49,12 @@ export function ShortFormContent() {
               <img
                 src={photo.src}
                 alt={photo.alt}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                 loading="lazy"
               />
 
-              {/* Gradient overlay with title */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent">
+              {/* Gradient overlay with title - tap on mobile, hover on desktop */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   {photo.title && (
                     <h3 className="text-white font-display text-lg md:text-xl font-semibold text-center">
@@ -63,9 +63,6 @@ export function ShortFormContent() {
                   )}
                 </div>
               </div>
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* Hover border */}
               <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all duration-300 rounded-lg" />

@@ -76,51 +76,30 @@ export function Photography() {
           transition={{ delay: 0.1 }}
           className="mb-12"
         >
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between mb-6">
-            {/* Category Filters */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-all focus-ring',
-                    selectedCategory === category
-                      ? 'bg-accent text-white shadow-soft'
-                      : 'bg-paper text-ink border border-ink/10 hover:border-accent hover:text-accent'
-                  )}
-                >
-                  {category}
-                </button>
-              ))}
-              {selectedCategory !== 'All' && (
-                <button
-                  onClick={handleClearFilters}
-                  className="px-4 py-2 rounded-full text-sm font-medium bg-paper text-muted border border-ink/10 hover:border-ink/30 transition-all focus-ring"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-
-            {/* Sort */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted">Sort:</span>
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-paper border border-ink/10 hover:border-ink/30 transition-all focus-ring cursor-pointer"
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2 justify-center">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryChange(category)}
+                className={cn(
+                  'px-4 py-2 rounded-full text-sm font-medium transition-all focus-ring',
+                  selectedCategory === category
+                    ? 'bg-accent text-white shadow-soft'
+                    : 'bg-paper text-ink border border-ink/10 hover:border-accent hover:text-accent'
+                )}
               >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Results count */}
-          <div className="text-sm text-muted">
-            Showing {filteredPhotos.length} {filteredPhotos.length === 1 ? 'photo' : 'photos'}
-            {selectedCategory !== 'All' && ` in ${selectedCategory}`}
+                {category}
+              </button>
+            ))}
+            {selectedCategory !== 'All' && (
+              <button
+                onClick={handleClearFilters}
+                className="px-4 py-2 rounded-full text-sm font-medium bg-paper text-muted border border-ink/10 hover:border-ink/30 transition-all focus-ring"
+              >
+                Clear
+              </button>
+            )}
           </div>
         </motion.div>
 
