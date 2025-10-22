@@ -244,8 +244,6 @@ export const categories = [
   'Editorial',
   'Events',
   'Personal',
-  'Filmmaking',
-  'Short Form',
 ] as const;
 
 export type Category = typeof categories[number];

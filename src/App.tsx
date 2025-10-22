@@ -8,6 +8,8 @@ import { FloatingContactBubble } from './components/FloatingContactBubble';
 import { LightboxProvider } from './components/LightboxProvider';
 import { Home } from './routes/Home';
 import { Photography } from './routes/Photography';
+import { Filmmaking } from './routes/Filmmaking';
+import { ShortForm } from './routes/ShortForm';
 import { NotFound } from './routes/NotFound';
 import { siteConfig } from './data/site';
 
@@ -72,6 +74,38 @@ function AnimatedRoutes() {
                 transition={{ duration: 0.3 }}
               >
                 <Photography />
+              </motion.div>
+            </>
+          }
+        />
+        <Route
+          path="/filmmaking"
+          element={
+            <>
+              <SEO title="Filmmaking" description="Cinematic frames and film production moments" />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Filmmaking />
+              </motion.div>
+            </>
+          }
+        />
+        <Route
+          path="/short-form"
+          element={
+            <>
+              <SEO title="Short Form Content" description="Vertical storytelling for the digital age" />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ShortForm />
               </motion.div>
             </>
           }

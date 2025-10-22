@@ -18,6 +18,8 @@ export const siteConfig = {
     links: [
       { label: 'Home', href: '/' },
       { label: 'Photography', href: '/photography' },
+      { label: 'Filmmaking', href: '/filmmaking' },
+      { label: 'Short Form', href: '/short-form' },
     ],
   },
   cta: {

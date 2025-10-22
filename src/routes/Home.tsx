@@ -118,67 +118,8 @@ export function Home() {
         </div>
       </Section>
 
-      {/* Category Preview */}
-      <Section>
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-4">
-              Explore by Category
-            </h2>
-            <p className="text-muted text-lg">
-              Discover diverse creative work
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              {
-                name: 'Portraits',
-                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop'
-              },
-              {
-                name: 'Editorial',
-                image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=1000&fit=crop'
-              },
-              {
-                name: 'Filmmaking',
-                image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&h=1000&fit=crop'
-              },
-            ].map((category, index) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link
-                  to={`/photography?category=${category.name}`}
-                  className="group block relative aspect-[3/4] rounded-lg overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform"
-                >
-                  <img
-                    src={category.image}
-                    alt={`${category.name} photography`}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
-                    <div className="absolute inset-0 flex items-end p-8">
-                      <h3 className="text-white font-display text-2xl md:text-3xl font-semibold">
-                        {category.name}
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all rounded-lg" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       {/* Testimonials */}
-      <Section className="bg-paper">
+      <Section className="bg-ink/5">
         <div className="container">
           <TestimonialsCarousel />
         </div>
