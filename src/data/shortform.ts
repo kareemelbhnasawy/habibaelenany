@@ -4,6 +4,7 @@ export interface ShortFormItem {
   width: number;
   height: number;
   alt: string;
+  category: string;
   title: string;
   description: string;
   year?: number;
@@ -16,6 +17,7 @@ export const shortFormItems: ShortFormItem[] = [
     width: 1080,
     height: 1920,
     alt: 'Vertical video content creation',
+    category: 'Short Form',
     title: 'Mernyth',
     description: 'Dynamic storytelling in vertical format that captures attention and drives engagement through compelling visual narratives.',
     year: 2024,
@@ -26,6 +28,7 @@ export const shortFormItems: ShortFormItem[] = [
     width: 1080,
     height: 1920,
     alt: 'Social media content production',
+    category: 'Short Form',
     title: 'Flyzone',
     description: 'Engaging social narratives designed to connect with audiences and tell authentic stories in the digital age.',
     year: 2024,
@@ -36,6 +39,7 @@ export const shortFormItems: ShortFormItem[] = [
     width: 1080,
     height: 1920,
     alt: 'Fitness content creation',
+    category: 'Short Form',
     title: 'Body Bar',
     description: 'Fitness content that inspires and motivates viewers to pursue their wellness goals with style and confidence.',
     year: 2024,
@@ -46,6 +50,7 @@ export const shortFormItems: ShortFormItem[] = [
     width: 1080,
     height: 1920,
     alt: 'Lifestyle vlog content',
+    category: 'Short Form',
     title: 'Daily Vibes',
     description: 'Capturing everyday moments with a creative twist that resonates with lifestyle enthusiasts.',
     year: 2023,
@@ -56,6 +61,7 @@ export const shortFormItems: ShortFormItem[] = [
     width: 1080,
     height: 1920,
     alt: 'Coffee shop ambiance',
+    category: 'Short Form',
     title: 'Coffee',
     description: 'Creating cozy and inviting content that celebrates the simple pleasures of coffee culture.',
     year: 2024,

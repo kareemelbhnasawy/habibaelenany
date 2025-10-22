@@ -4,6 +4,7 @@ export interface FilmmakingItem {
   width: number;
   height: number;
   alt: string;
+  category: string;
   title?: string;
   caption?: string;
   year?: number;
@@ -16,6 +17,7 @@ export const filmmakingItems: FilmmakingItem[] = [
     width: 1600,
     height: 900,
     alt: 'Cinematic film scene with dramatic lighting',
+    category: 'Filmmaking',
     title: 'Cinematic Moments',
     caption: 'Behind the scenes of storytelling',
     year: 2024,
@@ -26,6 +28,7 @@ export const filmmakingItems: FilmmakingItem[] = [
     width: 1600,
     height: 900,
     alt: 'Film production camera setup',
+    category: 'Filmmaking',
     title: 'Production',
     caption: 'Crafting visual narratives',
     year: 2024,
@@ -36,6 +39,7 @@ export const filmmakingItems: FilmmakingItem[] = [
     width: 1600,
     height: 900,
     alt: 'Director working on film set',
+    category: 'Filmmaking',
     title: 'Direction',
     caption: 'Bringing visions to life',
     year: 2023,
@@ -46,6 +50,7 @@ export const filmmakingItems: FilmmakingItem[] = [
     width: 1600,
     height: 900,
     alt: 'Professional film camera in action',
+    category: 'Filmmaking',
     title: 'Camera Work',
     year: 2024,
   },
@@ -55,6 +60,7 @@ export const filmmakingItems: FilmmakingItem[] = [
     width: 1600,
     height: 900,
     alt: 'Film set with lighting equipment',
+    category: 'Filmmaking',
     title: 'Lighting Magic',
     year: 2023,
   },
