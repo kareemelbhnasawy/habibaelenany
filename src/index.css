@@ -7,7 +7,7 @@
   --color-paper: #FFFFFF;
   --color-ink: #121212;
   --color-muted: #6B7280;
-  --color-accent: #A5524F;
+  --color-accent: #800B12;
 
   /* Fonts */
   --font-display: 'Playfair Display', serif;
@@ -126,7 +126,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
+  border-radius: 0;
   font-weight: 500;
   transition: all 0.2s;
 }
@@ -159,7 +159,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .card {
   background-color: var(--color-paper);
-  border-radius: 0.5rem;
+  border-radius: 0;
   box-shadow: var(--shadow-soft);
   border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
   overflow: hidden;

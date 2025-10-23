@@ -12,16 +12,29 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!isMobileMenuOpen) {
+        setIsScrolled(window.scrollY > 50);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
 
   const isHome = location.pathname === '/';
 
@@ -31,7 +44,9 @@ export function Navbar() {
       animate={{ y: 0 }}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled || !isHome
+        isMobileMenuOpen
+          ? 'bg-transparent'
+          : isScrolled || !isHome
           ? 'bg-paper/95 backdrop-blur-md shadow-soft'
           : 'bg-transparent'
       )}
@@ -41,11 +56,11 @@ export function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="focus-ring rounded-lg flex items-center"
+            className="flex items-center outline-none"
             aria-label="Home"
           >
             <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none -mt-1 md:-mt-1.5">
-              HABIBA
+              HABIBA EL ENANY
             </h1>
           </Link>
 
@@ -56,9 +71,9 @@ export function Navbar() {
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  'text-sm font-medium transition-colors focus-ring rounded-lg px-3 py-2',
+                  'text-base font-display font-normal tracking-wide transition-all px-3 py-2 relative outline-none',
                   location.pathname === link.href
-                    ? 'text-accent'
+                    ? 'text-accent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent'
                     : 'text-ink hover:text-accent'
                 )}
               >
@@ -70,7 +85,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden focus-ring rounded-lg p-2"
+            className="md:hidden p-2 outline-none"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -82,32 +97,55 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden"
-            >
-              <div className="py-4 space-y-2 border-t border-ink/5">
-                {siteConfig.nav.links.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={cn(
-                      'block px-4 py-3 text-base font-medium rounded-lg transition-colors focus-ring',
-                      location.pathname === link.href
-                        ? 'text-accent bg-accent/5'
-                        : 'text-ink hover:bg-ink/5'
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
+            <>
+              {/* Full-screen Menu with Blurred Background */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: 'tween', duration: 0.3 }}
+                className="fixed inset-0 bg-paper/30 backdrop-blur-lg z-50 overflow-y-auto"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <div onClick={(e) => e.stopPropagation()}>
+                  {/* Close button */}
+                  <div className="flex justify-end p-6">
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="p-2 outline-none"
+                      aria-label="Close menu"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  {/* Menu Items */}
+                  <nav className="px-8 py-4">
+                    {siteConfig.nav.links.map((link, index) => (
+                      <div key={link.href}>
+                        <Link
+                          to={link.href}
+                          className={cn(
+                            'block py-5 text-xl font-display font-normal tracking-wider transition-all outline-none',
+                            location.pathname === link.href
+                              ? 'text-accent font-semibold'
+                              : 'text-ink hover:text-accent'
+                          )}
+                        >
+                          {link.label}
+                        </Link>
+                        {index < siteConfig.nav.links.length - 1 && (
+                          <div className="border-b border-ink/10" />
+                        )}
+                      </div>
+                    ))}
+                  </nav>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>

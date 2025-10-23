@@ -136,7 +136,7 @@ Edit `src/index.css` in the `@theme` section:
 --color-paper: #FFFFFF;
 --color-ink: #121212;
 --color-muted: #6B7280;
---color-accent: #A5524F;
+--color-accent: #800B12;
 ```
 
 ### Change Fonts

@@ -24,50 +24,32 @@ export function TestimonialsCarousel() {
   }, [emblaApi]);
 
   return (
-    <div className="relative">
+    <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-2">
-            Clients & Feedback
-          </h2>
-          <p className="text-muted text-sm md:text-base uppercase tracking-wide">
-            What People Say
-          </p>
-        </div>
-
-        <div className="hidden md:flex gap-2">
-          <button
-            onClick={scrollPrev}
-            className={cn(
-              'w-10 h-10 rounded-full',
-              'bg-paper border border-ink/10',
-              'flex items-center justify-center',
-              'hover:border-ink/30 hover:shadow-soft transition-all',
-              'focus-ring'
-            )}
-            aria-label="Previous testimonials"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={scrollNext}
-            className={cn(
-              'w-10 h-10 rounded-full',
-              'bg-paper border border-ink/10',
-              'flex items-center justify-center',
-              'hover:border-ink/30 hover:shadow-soft transition-all',
-              'focus-ring'
-            )}
-            aria-label="Next testimonials"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-2">
+          Clients & Feedback
+        </h2>
       </div>
 
-      {/* Carousel */}
-      <div className="overflow-hidden -mx-4 sm:mx-0" ref={emblaRef}>
+      {/* Carousel with Navigation */}
+      <div className="relative flex items-center gap-4">
+        {/* Previous Button - Desktop */}
+        <button
+          onClick={scrollPrev}
+          className={cn(
+            'hidden md:flex shrink-0',
+            'items-center justify-center',
+            'text-ink hover:text-accent transition-all outline-none',
+            'opacity-60 hover:opacity-100'
+          )}
+          aria-label="Previous testimonials"
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </button>
+
+        {/* Carousel */}
+        <div className="overflow-hidden flex-1" ref={emblaRef}>
         <div className="flex gap-4 md:gap-6 px-4 sm:px-0">
           {testimonials.map((testimonial, index) => (
             <motion.div
@@ -85,7 +67,7 @@ export function TestimonialsCarousel() {
                     <img
                       src={testimonial.avatar}
                       alt={testimonial.name}
-                      className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover"
+                      className="w-12 h-12 md:w-14 md:h-14 object-cover"
                       loading="lazy"
                     />
                   )}
@@ -107,35 +89,38 @@ export function TestimonialsCarousel() {
             </motion.div>
           ))}
         </div>
-      </div>
+        </div>
 
-      {/* Mobile Navigation */}
-      <div className="flex md:hidden justify-center gap-2 mt-6">
-        <button
-          onClick={scrollPrev}
-          className={cn(
-            'w-10 h-10 rounded-full',
-            'bg-paper border border-ink/10',
-            'flex items-center justify-center',
-            'hover:border-ink/30 hover:shadow-soft transition-all',
-            'focus-ring'
-          )}
-          aria-label="Previous testimonials"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
+        {/* Next Button - Desktop */}
         <button
           onClick={scrollNext}
           className={cn(
-            'w-10 h-10 rounded-full',
-            'bg-paper border border-ink/10',
-            'flex items-center justify-center',
-            'hover:border-ink/30 hover:shadow-soft transition-all',
-            'focus-ring'
+            'hidden md:flex shrink-0',
+            'items-center justify-center',
+            'text-ink hover:text-accent transition-all outline-none',
+            'opacity-60 hover:opacity-100'
           )}
           aria-label="Next testimonials"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-8 h-8" />
+        </button>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div className="flex md:hidden justify-center gap-4 mt-6">
+        <button
+          onClick={scrollPrev}
+          className="text-ink hover:text-accent transition-all outline-none opacity-60 hover:opacity-100"
+          aria-label="Previous testimonials"
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </button>
+        <button
+          onClick={scrollNext}
+          className="text-ink hover:text-accent transition-all outline-none opacity-60 hover:opacity-100"
+          aria-label="Next testimonials"
+        >
+          <ChevronRight className="w-8 h-8" />
         </button>
       </div>
     </div>

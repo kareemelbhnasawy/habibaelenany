@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { Instagram, Linkedin } from 'lucide-react';
+// import { Instagram, Linkedin } from 'lucide-react';
 import { siteConfig } from '../data/site';
 
 export function Footer() {
@@ -12,7 +11,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <h3 className="text-xl font-display font-semibold tracking-tight mb-4">
-              HABIBA
+              HABIBA EL ENANY
             </h3>
             <p className="text-sm text-muted max-w-xs">
               {siteConfig.photographer.tagline}
@@ -20,7 +19,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          {/* <div>
             <h4 className="text-sm font-semibold mb-4 uppercase tracking-wide">
               Quick Links
             </h4>
@@ -29,16 +28,16 @@ export function Footer() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="block text-sm text-muted hover:text-accent transition-colors focus-ring rounded"
+                  className="block text-sm text-muted hover:text-accent transition-colors focus-ring"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
-          </div>
+          </div> */}
 
           {/* Contact & Social */}
-          <div>
+          {/* <div>
             <h4 className="text-sm font-semibold mb-4 uppercase tracking-wide">
               Connect
             </h4>
@@ -81,7 +80,7 @@ export function Footer() {
                 </a>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Copyright */}

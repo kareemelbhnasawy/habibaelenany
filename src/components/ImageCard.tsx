@@ -17,7 +17,7 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
       className="group relative cursor-pointer"
       onClick={onClick}
     >
-      <div className="relative overflow-hidden rounded-lg bg-ink/5">
+      <div className="relative overflow-hidden bg-ink/5">
         {/* Aspect ratio container */}
         <div
           style={{
@@ -36,7 +36,7 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
             {photo.category && (
-              <span className="inline-block px-2 py-1 rounded-full bg-accent/90 text-white text-xs font-medium mb-2">
+              <span className="inline-block px-4 py-2 rounded-full bg-accent/90 text-white text-sm font-medium mb-2 w-fit">
                 {photo.category}
               </span>
             )}
@@ -57,7 +57,7 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
       {/* Subtle shadow lift on hover */}
       <div
         className={cn(
-          'absolute inset-0 rounded-lg ring-2 ring-transparent',
+          'absolute inset-0 ring-2 ring-transparent',
           'group-hover:ring-accent/20 group-hover:shadow-lifted',
           'transition-all duration-300 pointer-events-none'
         )}

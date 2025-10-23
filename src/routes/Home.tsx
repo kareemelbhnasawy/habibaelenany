@@ -41,13 +41,13 @@ export function Home() {
 
                 {/* Details Row */}
                 <div className="mb-8 flex flex-wrap gap-4 md:gap-6">
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2">
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2">
                     <div className="w-2 h-2 rounded-full bg-green-400" />
                     <span className="text-sm text-white/90">
                       {siteConfig.photographer.availability}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2">
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2">
                     <MapPin className="w-4 h-4 text-white/90" />
                     <span className="text-sm text-white/90">{siteConfig.photographer.location}</span>
                   </div>
@@ -56,26 +56,14 @@ export function Home() {
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap gap-4">
                   <a
-                    href={`mailto:${siteConfig.contact.email}`}
+                    href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn bg-white text-ink hover:bg-white/90 shadow-xl"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Book a shoot
                   </a>
-                  <Link
-                    to="/photography"
-                    className="btn bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-xl"
-                  >
-                    <span>About me</span>
-                    <svg
-                      className="w-4 h-4 ml-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
                 </div>
               </motion.div>
             </div>
@@ -89,7 +77,7 @@ export function Home() {
           <HighlightsCarousel />
 
           <div className="mt-12 text-center">
-            <Link to="/photography" className="btn btn-secondary !rounded-none">
+            <Link to="/photography" className="btn btn-secondary">
               View all
               <svg
                 className="w-4 h-4 ml-2"
@@ -126,12 +114,15 @@ export function Home() {
       </Section>
 
       {/* CTA Band */}
-      <Section className="bg-accent text-white relative overflow-hidden">
-        {/* Subtle texture */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          }} />
+      <Section className="relative overflow-hidden min-h-[400px] md:min-h-[500px] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80"
+            alt="Photography background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-ink/60" />
         </div>
 
         <div className="container relative z-10">
@@ -141,15 +132,17 @@ export function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-6 text-white">
                 {siteConfig.cta.headline}
               </h2>
               <p className="text-lg md:text-xl mb-8 text-white/90">
                 {siteConfig.cta.subtext}
               </p>
               <a
-                href={`mailto:${siteConfig.contact.email}`}
-                className="btn bg-white text-accent hover:bg-white/90"
+                href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn bg-white text-ink hover:bg-white/90"
               >
                 Get in touch
               </a>

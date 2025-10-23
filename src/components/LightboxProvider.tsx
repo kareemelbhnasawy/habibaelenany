@@ -86,11 +86,11 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
             >
               {currentPhoto.category && (
                 <span
+                className='bg-accent/90'
                   style={{
                     display: 'inline-block',
                     padding: '0.5rem 1.5rem',
                     borderRadius: '9999px',
-                    backgroundColor: 'rgba(165, 82, 79, 0.9)',
                     color: 'white',
                     fontSize: '0.875rem',
                     fontWeight: '500',

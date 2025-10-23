@@ -9,13 +9,10 @@ export function ShortFormContent() {
   return (
     <div className="relative">
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="mb-12">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-4">
           Short Form Content
         </h2>
-        <p className="text-muted text-lg">
-          Vertical storytelling for the digital age
-        </p>
       </div>
 
       {/* Grid - 3 columns like the old category preview */}
@@ -30,7 +27,7 @@ export function ShortFormContent() {
           >
             <Link
               to="/short-form"
-              className="group block relative aspect-[3/4] rounded-lg overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform"
+              className="group block relative aspect-[3/4] overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform"
             >
               <img
                 src={item.src}
@@ -45,7 +42,7 @@ export function ShortFormContent() {
                   </h3>
                 </div>
               </div>
-              <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all rounded-lg" />
+              <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all" />
             </Link>
           </motion.div>
         ))}

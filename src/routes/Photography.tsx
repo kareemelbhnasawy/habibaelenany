@@ -83,7 +83,7 @@ export function Photography() {
                 key={category}
                 onClick={() => handleCategoryChange(category)}
                 className={cn(
-                  'px-4 py-2 rounded-full text-sm font-medium transition-all focus-ring',
+                  'px-4 py-2 text-sm font-medium transition-all focus-ring',
                   selectedCategory === category
                     ? 'bg-accent text-white shadow-soft'
                     : 'bg-paper text-ink border border-ink/10 hover:border-accent hover:text-accent'
@@ -95,7 +95,7 @@ export function Photography() {
             {selectedCategory !== 'All' && (
               <button
                 onClick={handleClearFilters}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-paper text-muted border border-ink/10 hover:border-ink/30 transition-all focus-ring"
+                className="px-4 py-2 text-sm font-medium bg-paper text-muted border border-ink/10 hover:border-ink/30 transition-all focus-ring"
               >
                 Clear
               </button>

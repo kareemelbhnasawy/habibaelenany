@@ -1,24 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Instagram, Linkedin, X, Check } from 'lucide-react';
-import { siteConfig } from '../data/site';
+import { Mail, Instagram, MessageCircle, X } from 'lucide-react';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { cn } from '../utils/cn';
 
 export function FloatingContactBubble() {
   const [isOpen, setIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(siteConfig.contact.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy email:', err);
-    }
-  };
 
   return (
     <>
@@ -59,47 +47,25 @@ export function FloatingContactBubble() {
               </div>
 
               <div className="space-y-3">
-                {/* Email */}
+                {/* WhatsApp */}
                 <a
-                  href={`mailto:${siteConfig.contact.email}`}
+                  href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-ink/5 transition-colors focus-ring group"
                 >
                   <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Mail className="w-5 h-5 text-accent" />
+                    <MessageCircle className="w-5 h-5 text-accent" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">Email</p>
-                    <p className="text-xs text-muted truncate">
-                      {siteConfig.contact.email}
-                    </p>
+                    <p className="text-sm font-medium">WhatsApp</p>
+                    <p className="text-xs text-muted">Connect with Me</p>
                   </div>
                 </a>
 
-                {/* Copy Email */}
-                <button
-                  onClick={handleCopyEmail}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-ink/5 transition-colors focus-ring group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    {copied ? (
-                      <Check className="w-5 h-5 text-accent" />
-                    ) : (
-                      <Mail className="w-5 h-5 text-accent" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-medium">
-                      {copied ? 'Copied!' : 'Copy Email'}
-                    </p>
-                    <p className="text-xs text-muted">
-                      {copied ? 'Email copied to clipboard' : 'Click to copy'}
-                    </p>
-                  </div>
-                </button>
-
                 {/* Instagram */}
                 <a
-                  href={siteConfig.contact.instagram}
+                  href="https://www.instagram.com/habibalenany"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-ink/5 transition-colors focus-ring group"
@@ -109,23 +75,23 @@ export function FloatingContactBubble() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">Instagram</p>
-                    <p className="text-xs text-muted">@habibaphoto</p>
+                    <p className="text-xs text-muted">@habibalenany</p>
                   </div>
                 </a>
 
-                {/* LinkedIn */}
+                {/* Email */}
                 <a
-                  href={siteConfig.contact.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:habibalenany@gmail.com?subject=Collaboration%20Inquiry&body=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-ink/5 transition-colors focus-ring group"
                 >
                   <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Linkedin className="w-5 h-5 text-accent" />
+                    <Mail className="w-5 h-5 text-accent" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">LinkedIn</p>
-                    <p className="text-xs text-muted">Connect with me</p>
+                    <p className="text-sm font-medium">Email</p>
+                    <p className="text-xs text-muted truncate">
+                      habibalenany@gmail.com
+                    </p>
                   </div>
                 </a>
               </div>
