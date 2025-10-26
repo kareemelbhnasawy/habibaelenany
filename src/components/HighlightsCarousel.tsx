@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { motion } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { highlights } from '../data/highlights';
 import { photos } from '../data/photos';
@@ -9,22 +9,6 @@ import { cn } from '../utils/cn';
 
 export function HighlightsCarousel() {
   const { openLightbox } = useLightbox();
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
-    slidesToScroll: 1,
-    breakpoints: {
-      '(min-width: 768px)': { slidesToScroll: 2 },
-      '(min-width: 1024px)': { slidesToScroll: 3 },
-    },
-  });
-
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
 
   const highlightPhotos = highlights.map(h => {
     const photo = photos.find(p => p.id === h.photoId);
@@ -33,6 +17,26 @@ export function HighlightsCarousel() {
 
   // Create array of photos for lightbox
   const lightboxPhotos = highlightPhotos.map(h => h.photo!);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+      skipSnaps: true,
+      dragFree: true,
+      containScroll: 'trimSnaps',
+      duration: 40,
+    },
+    [WheelGesturesPlugin()]
+  );
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   return (
     <div>
@@ -61,14 +65,10 @@ export function HighlightsCarousel() {
 
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
-        <div className="flex gap-4 md:gap-6 px-4 sm:px-0">
+        <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
           {highlightPhotos.map((highlight, index) => (
-            <motion.div
-              key={highlight.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+            <div
+              key={`${highlight.id}-${index}`}
               className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
             >
               <div
@@ -95,7 +95,7 @@ export function HighlightsCarousel() {
                 {/* Hover effect */}
                 <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all duration-300" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
         </div>

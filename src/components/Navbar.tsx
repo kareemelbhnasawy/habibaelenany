@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { siteConfig } from '../data/site';
-import { cn } from '../utils/cn';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { siteConfig } from "../data/site";
+import { cn } from "../utils/cn";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,8 +17,8 @@ export function Navbar() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
@@ -27,28 +27,28 @@ export function Navbar() {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
 
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === "/";
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isMobileMenuOpen
-          ? 'bg-transparent'
+          ? "bg-transparent"
           : isScrolled || !isHome
-          ? 'bg-paper/95 backdrop-blur-md shadow-soft'
-          : 'bg-transparent'
+          ? "bg-paper/95 backdrop-blur-md shadow-soft"
+          : "bg-transparent"
       )}
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,12 +56,15 @@ export function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center outline-none"
+            className="flex flex-col items-start outline-none"
             aria-label="Home"
           >
-            <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none -mt-1 md:-mt-1.5">
-              HABIBA EL ENANY
+            <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none">
+               HABIBA EL ENANY
             </h1>
+            <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] uppercase font-light -mt-0.5 self-center">
+              PHOTOGRAPHY
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -71,10 +74,10 @@ export function Navbar() {
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  'text-base font-display font-normal tracking-wide transition-all px-3 py-2 relative outline-none',
+                  "text-base font-display font-normal tracking-wide transition-all px-3 py-2 relative outline-none",
                   location.pathname === link.href
-                    ? 'text-accent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent'
-                    : 'text-ink hover:text-accent'
+                    ? "text-accent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent"
+                    : "text-ink hover:text-accent"
                 )}
               >
                 {link.label}
@@ -106,7 +109,7 @@ export function Navbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ type: 'tween', duration: 0.3 }}
+                transition={{ type: "tween", duration: 0.3 }}
                 className="fixed inset-0 bg-paper/30 backdrop-blur-lg z-50 overflow-y-auto"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -129,10 +132,10 @@ export function Navbar() {
                         <Link
                           to={link.href}
                           className={cn(
-                            'block py-5 text-xl font-display font-normal tracking-wider transition-all outline-none',
+                            "block py-5 text-xl font-display font-normal tracking-wider transition-all outline-none",
                             location.pathname === link.href
-                              ? 'text-accent font-semibold'
-                              : 'text-ink hover:text-accent'
+                              ? "text-accent font-semibold"
+                              : "text-ink hover:text-accent"
                           )}
                         >
                           {link.label}

@@ -1,56 +1,69 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MasonryGrid } from '../components/MasonryGrid';
 import { ImageCard } from '../components/ImageCard';
 import { useLightbox } from '../components/LightboxProvider';
 import { categories, getPhotosByCategory } from '../data/photos';
 import type { Category } from '../data/photos';
 import { cn } from '../utils/cn';
 
-type SortOrder = 'newest' | 'oldest';
-
 export function Photography() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedCategory, setSelectedCategory] = useState<Category>('All');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
+  const [activeSection, setActiveSection] = useState<string>('Portraits');
   const { openLightbox } = useLightbox();
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
+  const scrollToSection = (category: string) => {
+    const element = sectionRefs.current[category];
+    if (element) {
+      const offset = 100; // Account for fixed navbar
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  // Track which section is in view
   useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    if (categoryParam && categories.includes(categoryParam as Category)) {
-      setSelectedCategory(categoryParam as Category);
-    }
-  }, [searchParams]);
+    const observers: IntersectionObserver[] = [];
 
-  const handleCategoryChange = (category: Category) => {
-    setSelectedCategory(category);
-    if (category === 'All') {
-      searchParams.delete('category');
-    } else {
-      searchParams.set('category', category);
-    }
-    setSearchParams(searchParams);
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -50% 0px',
+      threshold: 0,
+    };
+
+    Object.keys(sectionRefs.current).forEach((key) => {
+      const element = sectionRefs.current[key];
+      if (element) {
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        observer.observe(element);
+        observers.push(observer);
+      }
+    });
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, []);
+
+  const handleImageClick = (category: Category, index: number) => {
+    const categoryPhotos = getPhotosByCategory(category);
+    openLightbox(categoryPhotos, index);
   };
 
-  const handleClearFilters = () => {
-    setSelectedCategory('All');
-    setSortOrder('newest');
-    setSearchParams({});
-  };
-
-  // Filter and sort photos
-  let filteredPhotos = getPhotosByCategory(selectedCategory);
-
-  filteredPhotos = [...filteredPhotos].sort((a, b) => {
-    const yearA = a.year || 2024;
-    const yearB = b.year || 2024;
-    return sortOrder === 'newest' ? yearB - yearA : yearA - yearB;
-  });
-
-  const handleImageClick = (index: number) => {
-    openLightbox(filteredPhotos, index);
-  };
+  // Filter out 'All' from categories for sections
+  const categoryList = categories.filter((cat) => cat !== 'All');
 
   return (
     <main className="min-h-screen pt-24 pb-16">
@@ -69,22 +82,21 @@ export function Photography() {
           </p>
         </motion.div>
 
-        {/* Filters */}
+        {/* Category Navigation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-12"
+          className="sticky top-20 z-30 bg-bg/95 backdrop-blur-md py-4 mb-12 -mx-4 px-4"
         >
-          {/* Category Filters */}
           <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
+            {categoryList.map((category) => (
               <button
                 key={category}
-                onClick={() => handleCategoryChange(category)}
+                onClick={() => scrollToSection(category)}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium transition-all focus-ring',
-                  selectedCategory === category
+                  'px-4 py-2 text-sm font-medium transition-all outline-none',
+                  activeSection === category
                     ? 'bg-accent text-white shadow-soft'
                     : 'bg-paper text-ink border border-ink/10 hover:border-accent hover:text-accent'
                 )}
@@ -92,44 +104,60 @@ export function Photography() {
                 {category}
               </button>
             ))}
-            {selectedCategory !== 'All' && (
-              <button
-                onClick={handleClearFilters}
-                className="px-4 py-2 text-sm font-medium bg-paper text-muted border border-ink/10 hover:border-ink/30 transition-all focus-ring"
-              >
-                Clear
-              </button>
-            )}
           </div>
         </motion.div>
 
-        {/* Gallery Grid */}
-        {filteredPhotos.length > 0 ? (
-          <MasonryGrid>
-            {filteredPhotos.map((photo, index) => (
-              <ImageCard
-                key={photo.id}
-                photo={photo}
-                index={index}
-                onClick={() => handleImageClick(index)}
-              />
-            ))}
-          </MasonryGrid>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
-            <p className="text-muted text-lg mb-4">No photos found in this category.</p>
-            <button
-              onClick={handleClearFilters}
-              className="btn btn-secondary"
-            >
-              Clear filters
-            </button>
-          </motion.div>
-        )}
+        {/* Category Sections */}
+        <div className="space-y-16">
+          {categoryList.map((category) => {
+            const categoryPhotos = getPhotosByCategory(category);
+
+            if (categoryPhotos.length === 0) return null;
+
+            return (
+              <section
+                key={category}
+                id={category}
+                ref={(el) => {
+                  sectionRefs.current[category] = el;
+                }}
+                className="scroll-mt-32"
+              >
+                {/* Section Header */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="mb-8"
+                >
+                  <h2 className="text-3xl md:text-4xl font-display font-semibold">
+                    {category}
+                  </h2>
+                </motion.div>
+
+                {/* 2-Column Masonry Grid using CSS columns */}
+                <div className="columns-2 gap-3 md:gap-4">
+                  {categoryPhotos.map((photo, index) => (
+                    <motion.div
+                      key={photo.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '100px' }}
+                      transition={{ delay: index * 0.05 }}
+                      className="mb-3 md:mb-4 break-inside-avoid"
+                    >
+                      <ImageCard
+                        photo={photo}
+                        index={index}
+                        onClick={() => handleImageClick(category, index)}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </div>
     </main>
   );

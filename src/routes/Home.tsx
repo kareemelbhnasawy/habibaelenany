@@ -39,15 +39,18 @@ export function Home() {
                   {siteConfig.photographer.bio}
                 </p>
 
-                {/* Details Row */}
+                {/* Divider Line */}
+                <div className="w-full h-px bg-white/20 mb-6" />
+
+                {/* Details Row - No background */}
                 <div className="mb-8 flex flex-wrap gap-4 md:gap-6">
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2">
+                  <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-400" />
                     <span className="text-sm text-white/90">
                       {siteConfig.photographer.availability}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2">
+                  <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-white/90" />
                     <span className="text-sm text-white/90">{siteConfig.photographer.location}</span>
                   </div>
@@ -59,7 +62,7 @@ export function Home() {
                     href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn bg-white text-ink hover:bg-white/90 shadow-xl"
+                    className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Book a shoot
@@ -77,8 +80,8 @@ export function Home() {
           <HighlightsCarousel />
 
           <div className="mt-12 text-center">
-            <Link to="/photography" className="btn btn-secondary">
-              View all
+            <Link to="/photography" className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm">
+              VIEW ALL
               <svg
                 className="w-4 h-4 ml-2"
                 fill="none"

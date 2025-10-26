@@ -1,19 +1,22 @@
 import { useCallback } from 'react';
-import { motion } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { testimonials } from '../data/testimonials';
 import { cn } from '../utils/cn';
 
 export function TestimonialsCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
-    slidesToScroll: 1,
-    breakpoints: {
-      '(min-width: 768px)': { slidesToScroll: 2 },
-      '(min-width: 1024px)': { slidesToScroll: 3 },
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+      skipSnaps: true,
+      dragFree: true,
+      containScroll: 'trimSnaps',
+      duration: 40,
     },
-  });
+    [WheelGesturesPlugin()]
+  );
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -50,14 +53,10 @@ export function TestimonialsCarousel() {
 
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
-        <div className="flex gap-4 md:gap-6 px-4 sm:px-0">
+        <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
           {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+            <div
+              key={`${testimonial.id}-${index}`}
               className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
             >
               <div className="card p-6 md:p-8 h-full flex flex-col">
@@ -86,7 +85,7 @@ export function TestimonialsCarousel() {
                   "{testimonial.quote}"
                 </blockquote>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
         </div>

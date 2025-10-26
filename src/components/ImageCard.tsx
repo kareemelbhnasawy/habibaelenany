@@ -32,26 +32,8 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
           />
         </div>
 
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-            {photo.category && (
-              <span className="inline-block px-4 py-2 rounded-full bg-accent/90 text-white text-sm font-medium mb-2 w-fit">
-                {photo.category}
-              </span>
-            )}
-            {photo.title && (
-              <h3 className="text-white font-display text-lg md:text-xl font-semibold">
-                {photo.title}
-              </h3>
-            )}
-            {photo.caption && (
-              <p className="text-white/80 text-sm mt-1 line-clamp-2">
-                {photo.caption}
-              </p>
-            )}
-          </div>
-        </div>
+        {/* Subtle dark overlay on hover - no text */}
+        <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* Subtle shadow lift on hover */}

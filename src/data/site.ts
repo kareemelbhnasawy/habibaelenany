@@ -1,5 +1,5 @@
 export const siteConfig = {
-  title: "Habiba El Enany Photography",
+  title: "Habiba El Enany",
   description: "Telling stories through light and movement.",
   photographer: {
     name: "Habiba El Enany",

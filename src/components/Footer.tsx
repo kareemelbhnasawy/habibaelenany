@@ -7,13 +7,13 @@ export function Footer() {
   return (
     <footer className="bg-paper border-t border-ink/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="text-center">
           {/* Brand */}
           <div>
             <h3 className="text-xl font-display font-semibold tracking-tight mb-4">
               HABIBA EL ENANY
             </h3>
-            <p className="text-sm text-muted max-w-xs">
+            <p className="text-sm text-muted max-w-xl mx-auto">
               {siteConfig.photographer.tagline}
             </p>
           </div>

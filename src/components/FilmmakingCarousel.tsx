@@ -1,22 +1,26 @@
 import { useCallback } from 'react';
-import { motion } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { photos } from '../data/photos';
 import { useLightbox } from './LightboxProvider';
 import { cn } from '../utils/cn';
+import { Link } from 'react-router-dom';
 
 const filmmakingPhotos = photos.filter(p => p.category === 'Filmmaking');
 
 export function FilmmakingCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
-    slidesToScroll: 1,
-    breakpoints: {
-      '(min-width: 768px)': { slidesToScroll: 2 },
-      '(min-width: 1024px)': { slidesToScroll: 3 },
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+      skipSnaps: true,
+      dragFree: true,
+      containScroll: 'trimSnaps',
+      duration: 40,
     },
-  });
+    [WheelGesturesPlugin()]
+  );
 
   const { openLightbox } = useLightbox();
 
@@ -55,15 +59,11 @@ export function FilmmakingCarousel() {
 
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
-        <div className="flex gap-4 md:gap-6 px-4 sm:px-0">
+        <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
           {filmmakingPhotos.map((photo, index) => (
-            <motion.div
-              key={photo.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
+            <div
+              key={`${photo.id}-${index}`}
+              className="flex-[0_0_90%] sm:flex-[0_0_60%] lg:flex-[0_0_40%] min-w-0"
             >
               <div
                 className="group relative aspect-video overflow-hidden cursor-pointer bg-ink/5 touch-manipulation active:scale-[0.98] transition-transform"
@@ -81,7 +81,7 @@ export function FilmmakingCarousel() {
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     {photo.title && (
-                      <span className="inline-block bg-white/90 text-ink px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
+                      <span className="inline-block text-white/90 px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
                         {photo.title}
                       </span>
                     )}
@@ -91,7 +91,7 @@ export function FilmmakingCarousel() {
                 {/* Hover border */}
                 <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/30 transition-all duration-300" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
         </div>
@@ -127,6 +127,21 @@ export function FilmmakingCarousel() {
         >
           <ChevronRight className="w-8 h-8" />
         </button>
+      </div>
+
+      {/* View All Button */}
+      <div className="mt-12 text-center">
+        <Link to="/filmmaking" className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm">
+          VIEW ALL
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
     </div>
   );
