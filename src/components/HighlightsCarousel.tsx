@@ -83,12 +83,12 @@ export function HighlightsCarousel() {
                   loading="lazy"
                 />
 
-                {/* Overlay with badge */}
+                {/* Overlay with title */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <span className="inline-block px-4 py-2 rounded-full bg-accent/90 text-white text-sm font-medium w-fit">
-                      {highlight.category}
-                    </span>
+                    <h3 className="text-white font-display text-2xl md:text-3xl font-semibold">
+                      {highlight.photo!.title}
+                    </h3>
                   </div>
                 </div>
 
