@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ImageCard } from '../components/ImageCard';
 import { useLightbox } from '../components/LightboxProvider';
@@ -12,6 +12,7 @@ export function Photography() {
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const scrollToSection = (category: string) => {
+    setActiveSection(category);
     const element = sectionRefs.current[category];
     if (element) {
       const offset = 100; // Account for fixed navbar
@@ -25,45 +26,13 @@ export function Photography() {
     }
   };
 
-  // Track which section is in view
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '-100px 0px -50% 0px',
-      threshold: 0,
-    };
-
-    Object.keys(sectionRefs.current).forEach((key) => {
-      const element = sectionRefs.current[key];
-      if (element) {
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-        observer.observe(element);
-        observers.push(observer);
-      }
-    });
-
-    return () => {
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, []);
+  // Filter out 'All' from categories for sections
+  const categoryList = categories.filter((cat) => cat !== 'All');
 
   const handleImageClick = (category: Category, index: number) => {
     const categoryPhotos = getPhotosByCategory(category);
-    openLightbox(categoryPhotos, index);
+    openLightbox(categoryPhotos, index, true);
   };
-
-  // Filter out 'All' from categories for sections
-  const categoryList = categories.filter((cat) => cat !== 'All');
 
   return (
     <main className="min-h-screen pt-24 pb-16">
@@ -89,20 +58,24 @@ export function Photography() {
           transition={{ delay: 0.1 }}
           className="sticky top-20 z-30 bg-bg/95 backdrop-blur-md py-4 mb-12 -mx-4 px-4"
         >
-          <div className="flex flex-wrap gap-2 justify-center">
-            {categoryList.map((category) => (
-              <button
-                key={category}
-                onClick={() => scrollToSection(category)}
-                className={cn(
-                  'px-4 py-2 text-sm font-medium transition-all outline-none',
-                  activeSection === category
-                    ? 'bg-accent text-white shadow-soft'
-                    : 'bg-paper text-ink border border-ink/10 hover:border-accent hover:text-accent'
+          <div className="flex flex-wrap gap-0 justify-center items-center">
+            {categoryList.map((category, index) => (
+              <div key={category} className="flex items-center">
+                <button
+                  onClick={() => scrollToSection(category)}
+                  className={cn(
+                    'px-4 py-2 text-sm font-medium transition-all outline-none',
+                    activeSection === category
+                      ? 'text-accent'
+                      : 'text-ink/60 hover:text-accent'
+                  )}
+                >
+                  {category}
+                </button>
+                {index < categoryList.length - 1 && (
+                  <div className="h-4 w-px bg-ink/20" />
                 )}
-              >
-                {category}
-              </button>
+              </div>
             ))}
           </div>
         </motion.div>

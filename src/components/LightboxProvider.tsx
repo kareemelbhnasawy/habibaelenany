@@ -5,7 +5,7 @@ import 'yet-another-react-lightbox/styles.css';
 import type { Photo } from '../data/photos';
 
 interface LightboxContextType {
-  openLightbox: (photos: Photo[], index: number) => void;
+  openLightbox: (photos: Photo[], index: number, hideCaption?: boolean) => void;
 }
 
 const LightboxContext = createContext<LightboxContextType | undefined>(undefined);
@@ -26,10 +26,12 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [hideCaption, setHideCaption] = useState(false);
 
-  const openLightbox = (newPhotos: Photo[], index: number) => {
+  const openLightbox = (newPhotos: Photo[], index: number, hideCaptionFlag = false) => {
     setPhotos(newPhotos);
     setCurrentIndex(index);
+    setHideCaption(hideCaptionFlag);
     setIsOpen(true);
   };
 
@@ -61,7 +63,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
             buttonNext: photos.length <= 1 ? () => null : undefined,
           }}
         />
-        {isOpen && currentPhoto && (
+        {isOpen && currentPhoto && !hideCaption && (
           <div
             className="lightbox-custom-caption"
             style={{
