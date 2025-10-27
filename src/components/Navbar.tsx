@@ -74,7 +74,7 @@ export function Navbar() {
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  "text-base font-display font-normal tracking-wide transition-all px-3 py-2 relative outline-none",
+                  "text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase transition-all px-3 py-2 relative outline-none",
                   location.pathname === link.href
                     ? "text-accent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent"
                     : "text-ink hover:text-accent"

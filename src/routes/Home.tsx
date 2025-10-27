@@ -65,7 +65,7 @@ export function Home() {
                     className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20"
                   >
                     <Mail className="w-4 h-4 mr-2" />
-                    Book a shoot
+                    BOOK A SHOOT
                   </a>
                 </div>
               </motion.div>
