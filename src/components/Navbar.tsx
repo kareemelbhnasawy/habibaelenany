@@ -62,7 +62,7 @@ export function Navbar() {
             <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none">
                HABIBA EL ENANY
             </h1>
-            <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] uppercase font-light -mt-0.5 self-center">
+            <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] uppercase font-light self-center ">
               PORTOFOLIO
             </span>
           </Link>
