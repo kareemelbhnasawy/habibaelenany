@@ -62,7 +62,7 @@ export function Home() {
                     href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20"
+                    className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     BOOK A SHOOT
@@ -117,7 +117,7 @@ export function Home() {
       </Section>
 
       {/* CTA Band */}
-      <Section className="relative overflow-hidden min-h-[400px] md:min-h-[500px] flex items-center">
+      <Section className="relative overflow-hidden min-h-[400px] md:min-h-[600px] flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
@@ -129,7 +129,7 @@ export function Home() {
         </div>
 
         <div className="container relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-3xl  sm:mx-auto lg:mx-50 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -145,7 +145,7 @@ export function Home() {
                 href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn bg-white text-ink hover:bg-white/90"
+                className="btn bg-white text-ink hover:bg-white/90 font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm"
               >
                 Get in touch
               </a>

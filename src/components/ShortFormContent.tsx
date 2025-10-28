@@ -16,7 +16,7 @@ export function ShortFormContent() {
       </div>
 
       {/* Grid - 3 columns with smaller images */}
-      <div className="grid md:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-4 lg:gap-6 max-w-sm md:max-w-4xl mx-auto">
         {displayItems.map((item, index) => (
           <motion.div
             key={item.id}
@@ -27,7 +27,7 @@ export function ShortFormContent() {
           >
             <Link
               to="/short-form"
-              className="group block relative aspect-[9/16] overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform"
+              className="group block relative aspect-[9/16] overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform max-w-[200px] md:max-w-none mx-auto"
             >
               <img
                 src={item.src}
@@ -36,8 +36,8 @@ export function ShortFormContent() {
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
-                <div className="absolute inset-0 flex items-end p-4">
-                  <h3 className="text-white font-display text-lg md:text-xl font-semibold">
+                <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <h3 className="text-white font-display text-xl md:text-2xl lg:text-3xl font-semibold text-center">
                     {item.title}
                   </h3>
                 </div>

@@ -132,9 +132,9 @@ export function Navbar() {
                         <Link
                           to={link.href}
                           className={cn(
-                            "block py-5 text-xl font-display font-normal tracking-wider transition-all outline-none",
+                            "block py-5 text-base font-sans font-light tracking-[0.2em] uppercase transition-all outline-none",
                             location.pathname === link.href
-                              ? "text-accent font-semibold"
+                              ? "text-accent"
                               : "text-ink hover:text-accent"
                           )}
                         >

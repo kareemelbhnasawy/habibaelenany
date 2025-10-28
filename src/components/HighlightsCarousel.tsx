@@ -84,11 +84,11 @@ export function HighlightsCarousel() {
                 />
 
                 {/* Overlay with title */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <h3 className="text-white font-display text-2xl md:text-3xl font-semibold">
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
+                    <span className="inline-block text-white/90 px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
                       {highlight.photo!.title}
-                    </h3>
+                    </span>
                   </div>
                 </div>
 

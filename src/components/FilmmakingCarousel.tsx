@@ -77,7 +77,7 @@ export function FilmmakingCarousel() {
                   loading="lazy"
                 />
 
-                {/* Overlay with badge */}
+                {/* Overlay with title */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     {photo.title && (

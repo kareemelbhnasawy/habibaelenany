@@ -64,7 +64,7 @@ export function Photography() {
                 <button
                   onClick={() => scrollToSection(category)}
                   className={cn(
-                    'px-4 py-2 text-sm font-medium transition-all outline-none',
+                    'px-4 py-2 text-xs md:text-base font-sans font-light tracking-[0.2em] uppercase transition-all outline-none',
                     activeSection === category
                       ? 'text-accent'
                       : 'text-ink/60 hover:text-accent'

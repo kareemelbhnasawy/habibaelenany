@@ -8,7 +8,7 @@ export function Filmmaking() {
   const { openLightbox } = useLightbox();
 
   const handleImageClick = (index: number) => {
-    openLightbox(filmmakingItems, index);
+    openLightbox(filmmakingItems, index, true);
   };
 
   return (

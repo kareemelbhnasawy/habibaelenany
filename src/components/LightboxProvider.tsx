@@ -86,7 +86,8 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
                 gap: '1rem',
               }}
             >
-              {currentPhoto.category && (
+              {/* Category Badge - Commented out */}
+              {/* {currentPhoto.category && (
                 <span
                 className='bg-accent/90'
                   style={{
@@ -101,7 +102,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
                 >
                   {currentPhoto.category}
                 </span>
-              )}
+              )} */}
               {currentPhoto.title && (
                 <h3
                   style={{
