@@ -3,7 +3,7 @@ import { shortFormItems } from '../data/shortform';
 
 export function ShortForm() {
   return (
-    <main className="min-h-screen pt-24 pb-16">
+    <main className="min-h-screen pt-24 pb-16" style={{ touchAction: 'pan-y' }}>
       <div className="container">
         {/* Header */}
         <motion.div
@@ -35,9 +35,9 @@ export function ShortForm() {
                 index % 2 === 1 ? 'md:order-2' : 'md:order-1'
               }`}>
                 {/* iPhone-like container - Large */}
-                <div className="relative w-[220px] sm:w-[240px] md:w-[260px] lg:w-[300px]">
+                <div className="relative w-[220px] sm:w-[240px] md:w-[260px] lg:w-[300px] shrink-0">
                   {/* Phone frame */}
-                  <div className="relative bg-white rounded-[3rem] p-3 shadow-2xl">
+                  <div className="relative bg-white rounded-[3rem] p-3 shadow-2xl isolate">
                     {/* Notch with camera */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-7 bg-white rounded-b-3xl z-10 flex items-center justify-start pl-5">
                       {/* Front camera */}
@@ -53,7 +53,8 @@ export function ShortForm() {
                       <img
                         src={item.src}
                         alt={item.alt}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover pointer-events-none"
+                        draggable="false"
                       />
                     </div>
                   </div>
@@ -83,12 +84,12 @@ export function ShortForm() {
                 </div>
 
                 {/* 3 Small Phones Grid */}
-                <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md">
+                <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto md:mx-0">
                   {[0, 1, 2].map((i) => {
                     const displayIndex = (index * 3 + i) % shortFormItems.length;
                     const displayItem = shortFormItems[displayIndex];
                     return (
-                      <div key={i} className="relative max-w-[120px]">
+                      <div key={i} className="relative w-full max-w-[100px] sm:max-w-[120px]">
                         {/* Small iPhone-like container */}
                         <div className="relative w-full">
                           {/* Phone frame */}
@@ -106,7 +107,8 @@ export function ShortForm() {
                               <img
                                 src={displayItem.src}
                                 alt={displayItem.alt}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover pointer-events-none"
+                                draggable="false"
                               />
                             </div>
                           </div>
