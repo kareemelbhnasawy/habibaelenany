@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { FloatingContactBubble } from './components/FloatingContactBubble';
 import { LightboxProvider } from './components/LightboxProvider';
+import { PageLoader } from './components/PageLoader';
 import { Home } from './routes/Home';
 import { Photography } from './routes/Photography';
 import { Filmmaking } from './routes/Filmmaking';
@@ -52,10 +53,10 @@ function AnimatedRoutes() {
             <>
               <SEO />
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'anticipate' }}
               >
                 <Home />
               </motion.div>
@@ -68,10 +69,10 @@ function AnimatedRoutes() {
             <>
               <SEO title="Photography" description="Explore my photography portfolio" />
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'anticipate' }}
               >
                 <Photography />
               </motion.div>
@@ -84,10 +85,10 @@ function AnimatedRoutes() {
             <>
               <SEO title="Filmmaking" description="Cinematic frames and film production moments" />
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'anticipate' }}
               >
                 <Filmmaking />
               </motion.div>
@@ -100,10 +101,10 @@ function AnimatedRoutes() {
             <>
               <SEO title="Short Form Content" description="Vertical storytelling for the digital age" />
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'anticipate' }}
               >
                 <ShortForm />
               </motion.div>
@@ -116,10 +117,10 @@ function AnimatedRoutes() {
             <>
               <SEO title="404 - Page Not Found" />
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'anticipate' }}
               >
                 <NotFound />
               </motion.div>
@@ -132,10 +133,22 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <LightboxProvider>
+          <PageLoader isLoading={isLoading} />
           <Navbar />
           <AnimatedRoutes />
           <Footer />

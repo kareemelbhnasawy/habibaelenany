@@ -7,19 +7,21 @@ import { FilmmakingCarousel } from '../components/FilmmakingCarousel';
 import { ShortFormContent } from '../components/ShortFormContent';
 import { TestimonialsCarousel } from '../components/TestimonialsCarousel';
 import { Section } from '../components/Section';
+import { ParallaxSection } from '../components/ParallaxSection';
+import { ScrollReveal } from '../components/ScrollReveal';
 import { siteConfig } from '../data/site';
 
 export function Home() {
   return (
     <main>
       {/* Hero Full-Screen Section */}
-      <section className="relative min-h-screen flex items-end">
-        {/* Full-screen Carousel Background - completely non-interactive */}
-        <div className="absolute inset-0 pointer-events-none select-none -z-10">
+      <section className="relative min-h-screen flex items-end overflow-hidden">
+        {/* Full-screen Carousel Background with Parallax */}
+        <ParallaxSection offset={100} className="absolute inset-0 pointer-events-none select-none -z-10">
           <HeroCarousel />
           {/* Enhanced gradient overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink/70" />
-        </div>
+        </ParallaxSection>
 
         {/* Content Overlay */}
         <div className="relative w-full pb-16 md:pb-20 lg:pb-24 pt-24 md:pt-32">
@@ -79,19 +81,21 @@ export function Home() {
         <div className="container">
           <HighlightsCarousel />
 
-          <div className="mt-12 text-center">
-            <Link to="/photography" className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm">
-              VIEW ALL
-              <svg
-                className="w-4 h-4 ml-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+          <ScrollReveal delay={0.2}>
+            <div className="mt-12 text-center">
+              <Link to="/photography" className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm">
+                VIEW ALL
+                <svg
+                  className="w-4 h-4 ml-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </Section>
 
