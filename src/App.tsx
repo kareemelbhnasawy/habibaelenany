@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -6,7 +6,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { FloatingContactBubble } from './components/FloatingContactBubble';
 import { LightboxProvider } from './components/LightboxProvider';
-import { PageLoader } from './components/PageLoader';
+// import { PageLoader } from './components/PageLoader';
 import { Home } from './routes/Home';
 import { Photography } from './routes/Photography';
 import { Filmmaking } from './routes/Filmmaking';
@@ -39,9 +39,13 @@ function SEO({ title, description }: { title?: string; description?: string }) {
 function AnimatedRoutes() {
   const location = useLocation();
 
-  // Scroll to top on route change
+  // Scroll to top on route change - instant for iOS compatibility
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Use instant behavior for iOS to prevent janky scrolling
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    // Force scroll position for iOS Safari
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [location.pathname]);
 
   return (
@@ -133,22 +137,22 @@ function AnimatedRoutes() {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate initial load
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+  // useEffect(() => {
+  //   // Simulate initial load
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <LightboxProvider>
-          <PageLoader isLoading={isLoading} />
+          {/* <PageLoader isLoading={isLoading} /> */}
           <Navbar />
           <AnimatedRoutes />
           <Footer />

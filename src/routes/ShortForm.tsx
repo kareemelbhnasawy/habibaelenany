@@ -3,7 +3,7 @@ import { shortFormItems } from '../data/shortform';
 
 export function ShortForm() {
   return (
-    <main className="min-h-screen pt-24 pb-16" style={{ touchAction: 'pan-y' }}>
+    <main className="min-h-screen pt-24 pb-16">
       <div className="container">
         {/* Header */}
         <motion.div
@@ -24,10 +24,10 @@ export function ShortForm() {
           {shortFormItems.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px", amount: 0.2 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="flex flex-col md:grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 lg:gap-16"
             >
               {/* Large Mobile Container */}

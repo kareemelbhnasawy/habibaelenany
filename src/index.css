@@ -35,6 +35,10 @@
 
 html {
   overflow-x: hidden;
+  /* iOS-specific optimizations */
+  -webkit-overflow-scrolling: touch;
+  /* Disable smooth scroll on iOS for better performance */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -45,10 +49,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
   overflow-x: hidden;
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Allow touch scrolling */
+  touch-action: pan-y pinch-zoom;
 }
 
 #root {
   min-height: 100vh;
+  /* iOS Safari viewport height fix */
+  min-height: -webkit-fill-available;
 }
 
 /* Subtle paper texture */
@@ -175,8 +185,11 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Disable smooth scroll on mobile devices for better performance */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -202,6 +215,18 @@ html {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Optimize images and media for touch scrolling on iOS */
+img, video {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent iOS Safari from highlighting tapped elements */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Lightbox overrides */
