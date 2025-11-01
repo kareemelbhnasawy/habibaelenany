@@ -11,15 +11,9 @@ export function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking && !isMobileMenuOpen) {
-        window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 50);
-          ticking = false;
-        });
-        ticking = true;
+      if (!isMobileMenuOpen) {
+        setIsScrolled(window.scrollY > 50);
       }
     };
 
@@ -33,27 +27,11 @@ export function Navbar() {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      // iOS-compatible scroll locking
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
     } else {
-      // Restore scroll position on iOS
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
       document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || "0") * -1);
-      }
     }
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
       document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
