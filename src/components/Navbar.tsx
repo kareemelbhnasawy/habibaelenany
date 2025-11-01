@@ -27,13 +27,17 @@ export function Navbar() {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      // Delay overflow hidden slightly to allow smooth animation start
+      const timer = setTimeout(() => {
+        document.body.style.overflow = "hidden";
+      }, 50);
+      return () => {
+        clearTimeout(timer);
+        document.body.style.overflow = "";
+      };
     } else {
       document.body.style.overflow = "";
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [isMobileMenuOpen]);
 
   const isHome = location.pathname === "/";
@@ -88,67 +92,100 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 outline-none"
+            className="md:hidden p-2 outline-none relative z-[110]"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            <AnimatePresence mode="wait">
+              {isMobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="w-6 h-6" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
 
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <>
-              {/* Full-screen Menu with Blurred Background */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="fixed inset-0 bg-paper/30 backdrop-blur-lg z-[100]"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                touchAction: 'none'
+              }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: "tween", duration: 0.3 }}
-                className="fixed inset-0 bg-paper/30 backdrop-blur-lg z-50 overflow-y-auto"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 60 }}
+                transition={{
+                  duration: 0.35,
+                  ease: [0.4, 0, 0.2, 1],
+                  delay: 0.05
+                }}
+                className="pt-24"
               >
-                <div onClick={(e) => e.stopPropagation()}>
-                  {/* Close button */}
-                  <div className="flex justify-end p-6">
-                    <button
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="p-2 outline-none"
-                      aria-label="Close menu"
+                {/* Menu Items */}
+                <nav className="px-8 py-4">
+                  {siteConfig.nav.links.map((link, index) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -30 }}
+                      transition={{
+                        duration: 0.35,
+                        delay: 0.1 + (index * 0.06),
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
                     >
-                      <X className="w-6 h-6" />
-                    </button>
-                  </div>
-
-                  {/* Menu Items */}
-                  <nav className="px-8 py-4">
-                    {siteConfig.nav.links.map((link, index) => (
-                      <div key={link.href}>
-                        <Link
-                          to={link.href}
-                          className={cn(
-                            "block py-5 text-base font-sans font-light tracking-[0.2em] uppercase transition-all outline-none",
-                            location.pathname === link.href
-                              ? "text-accent"
-                              : "text-ink hover:text-accent"
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                        {index < siteConfig.nav.links.length - 1 && (
-                          <div className="border-b border-ink/10" />
+                      <Link
+                        to={link.href}
+                        className={cn(
+                          "block py-5 text-base font-sans font-light tracking-[0.2em] uppercase transition-all outline-none",
+                          location.pathname === link.href
+                            ? "text-accent"
+                            : "text-ink hover:text-accent"
                         )}
-                      </div>
-                    ))}
-                  </nav>
-                </div>
+                      >
+                        {link.label}
+                      </Link>
+                      {index < siteConfig.nav.links.length - 1 && (
+                        <div className="border-b border-ink/10" />
+                      )}
+                    </motion.div>
+                  ))}
+                </nav>
               </motion.div>
-            </>
+            </motion.div>
           )}
         </AnimatePresence>
       </nav>
