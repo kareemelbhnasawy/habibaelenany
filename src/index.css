@@ -229,6 +229,38 @@ img, video {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Critical iOS scroll fix - prevent scroll blocking */
+body {
+  position: relative;
+  /* Ensure iOS doesn't lock scrolling */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+/* Prevent fixed elements from blocking scroll on iOS */
+header, footer {
+  pointer-events: auto;
+}
+
+/* Allow scrolling through fixed positioned elements */
+main {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  /* Optimize rendering on iOS */
+  will-change: scroll-position;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Optimize scrolling performance on iOS */
+#root > * {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
 /* Lightbox overrides */
 .yarl__root {
   --yarl__color_backdrop: rgba(18, 18, 18, 0.95);

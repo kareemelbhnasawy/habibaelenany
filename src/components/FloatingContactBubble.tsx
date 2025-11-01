@@ -19,12 +19,14 @@ export function FloatingContactBubble() {
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
             className="fixed inset-0 bg-ink/20 backdrop-blur-sm z-40 md:hidden"
+            style={{ touchAction: 'none' }}
           />
         )}
       </AnimatePresence>
 
       {/* Bubble */}
-      <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50">
+      <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 pointer-events-none">
+        <div className="pointer-events-auto">
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -155,6 +157,7 @@ export function FloatingContactBubble() {
             )}
           </AnimatePresence>
         </motion.button>
+        </div>
       </div>
     </>
   );
