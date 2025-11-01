@@ -1,14 +1,34 @@
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { shortFormItems } from '../data/shortform';
 
 export function ShortForm() {
+  // Fix iOS scroll issues at edges
+  useEffect(() => {
+    // Ensure smooth scrolling at page boundaries
+    const preventScrollLock = () => {
+      document.body.style.overflowY = 'scroll';
+      // @ts-expect-error - webkit prefix for iOS
+      document.body.style.webkitOverflowScrolling = 'touch';
+    };
+
+    preventScrollLock();
+
+    return () => {
+      document.body.style.overflowY = '';
+      // @ts-expect-error - webkit prefix for iOS
+      document.body.style.webkitOverflowScrolling = '';
+    };
+  }, []);
+
   return (
-    <main className="min-h-screen pt-24 pb-16">
+    <main className="min-h-screen pt-24 pb-16" style={{ touchAction: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <div className="container">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           className="mb-16 text-center"
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold mb-4">
@@ -26,9 +46,10 @@ export function ShortForm() {
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px", amount: 0.2 }}
+              viewport={{ once: true, margin: "0px", amount: 0.1 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
               className="flex flex-col md:grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 lg:gap-16"
+              style={{ willChange: 'auto' }}
             >
               {/* Large Mobile Container */}
               <div className={`relative mx-auto md:mx-0 flex items-center justify-center ${
@@ -55,6 +76,8 @@ export function ShortForm() {
                         alt={item.alt}
                         className="w-full h-full object-cover pointer-events-none"
                         draggable="false"
+                        loading="eager"
+                        decoding="async"
                       />
                     </div>
                   </div>
@@ -109,6 +132,8 @@ export function ShortForm() {
                                 alt={displayItem.alt}
                                 className="w-full h-full object-cover pointer-events-none"
                                 draggable="false"
+                                loading="lazy"
+                                decoding="async"
                               />
                             </div>
                           </div>
