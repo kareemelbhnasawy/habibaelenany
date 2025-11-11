@@ -20,7 +20,7 @@ export function HeroCarousel() {
         
         if (Object.keys(imageModules).length > 0) {
           // Load all the image modules and extract their URLs
-          const imagePromises = Object.entries(imageModules).map(async ([path, importFn]) => {
+          const imagePromises = Object.entries(imageModules).map(async ([, importFn]) => {
             const module = await importFn() as { default: string };
             return module.default;
           });
