@@ -5,7 +5,6 @@ import { HeroCarousel } from '../components/HeroCarousel';
 import { HighlightsCarousel } from '../components/HighlightsCarousel';
 import { FilmmakingCarousel } from '../components/FilmmakingCarousel';
 import { ShortFormContent } from '../components/ShortFormContent';
-import { TestimonialsCarousel } from '../components/TestimonialsCarousel';
 import { Section } from '../components/Section';
 import { ParallaxSection } from '../components/ParallaxSection';
 import { ScrollReveal } from '../components/ScrollReveal';
