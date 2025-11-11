@@ -1,15 +1,14 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { MapPin, Mail } from 'lucide-react';
-import { HeroCarousel } from '../components/HeroCarousel';
-import { HighlightsCarousel } from '../components/HighlightsCarousel';
-import { FilmmakingCarousel } from '../components/FilmmakingCarousel';
-import { ShortFormContent } from '../components/ShortFormContent';
-import { Section } from '../components/Section';
-import { ParallaxSection } from '../components/ParallaxSection';
-import { ScrollReveal } from '../components/ScrollReveal';
-import { siteConfig } from '../data/site';
-import referImage from '../assets/photos/refer.jpg';
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { MapPin, Mail } from "lucide-react";
+import { HeroCarousel } from "../components/HeroCarousel";
+import { HighlightsCarousel } from "../components/HighlightsCarousel";
+import { FilmmakingCarousel } from "../components/FilmmakingCarousel";
+import { ShortFormContent } from "../components/ShortFormContent";
+import { Section } from "../components/Section";
+import { ParallaxSection } from "../components/ParallaxSection";
+import { ScrollReveal } from "../components/ScrollReveal";
+import { siteConfig } from "../data/site";
 
 export function Home() {
   return (
@@ -17,7 +16,10 @@ export function Home() {
       {/* Hero Full-Screen Section */}
       <section className="relative min-h-screen flex items-end overflow-hidden">
         {/* Full-screen Carousel Background with Parallax */}
-        <ParallaxSection offset={100} className="absolute inset-0 pointer-events-none select-none -z-10">
+        <ParallaxSection
+          offset={100}
+          className="absolute inset-0 pointer-events-none select-none -z-10"
+        >
           <HeroCarousel />
           {/* Enhanced gradient overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink/70" />
@@ -54,7 +56,9 @@ export function Home() {
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-white/90" />
-                    <span className="text-sm text-white/90">{siteConfig.photographer.location}</span>
+                    <span className="text-sm text-white/90">
+                      {siteConfig.photographer.location}
+                    </span>
                   </div>
                 </div>
 
@@ -83,7 +87,10 @@ export function Home() {
 
           <ScrollReveal delay={0.2}>
             <div className="mt-12 text-center">
-              <Link to="/photography" className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm">
+              <Link
+                to="/photography"
+                className="btn btn-secondary font-sans tracking-[0.2em] uppercase font-light text-xs md:text-sm"
+              >
                 VIEW ALL
                 <svg
                   className="w-4 h-4 ml-2"
@@ -91,7 +98,12 @@ export function Home() {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </Link>
             </div>
@@ -125,12 +137,13 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src={referImage}
+            src="/src/assets/photos/refer.jpg"
             alt="Photography background"
             className="w-full h-full object-cover"
             onError={(e) => {
-              console.warn('Failed to load refer.jpg, using fallback');
-              e.currentTarget.src = "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80";
+              console.warn("Failed to load refer.jpg, using fallback");
+              e.currentTarget.src =
+                "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80";
             }}
           />
           <div className="absolute inset-0 bg-ink/60" />
