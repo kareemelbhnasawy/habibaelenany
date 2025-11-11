@@ -12,7 +12,7 @@ const shortFormHighlights = [
   {
     id: 'flyzone',
     title: 'Flyzone',
-    src: new URL('../assets/photos/short-form-highlights/flyzone.PNG', import.meta.url).href,
+    src: new URL('../assets/photos/short-form-highlights/flyzone.jpg', import.meta.url).href,
     alt: 'Flyzone short form content',
   },
   {
