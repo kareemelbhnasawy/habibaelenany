@@ -2,21 +2,51 @@ import { useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { highlights } from '../data/highlights';
-import { photos } from '../data/photos';
 import { useLightbox } from './LightboxProvider';
 import { cn } from '../utils/cn';
 
+// Photography Highlights with their dedicated images
+const photographyHighlights = [
+  {
+    id: 'photo-highlight-1',
+    src: new URL('../assets/photos/photography-highlights/img-01.JPG', import.meta.url).href,
+    alt: 'Photography highlight 1',
+    title: 'Editorial',
+    width: 1600,
+    height: 2000,
+    category: 'Photography',
+  },
+  {
+    id: 'photo-highlight-2',
+    src: new URL('../assets/photos/photography-highlights/img-02.JPG', import.meta.url).href,
+    alt: 'Photography highlight 2',
+    title: 'Portrait',
+    width: 1600,
+    height: 2000,
+    category: 'Photography',
+  },
+  {
+    id: 'photo-highlight-3',
+    src: new URL('../assets/photos/photography-highlights/img-03.jpg', import.meta.url).href,
+    alt: 'Photography highlight 3',
+    title: 'Fashion',
+    width: 1600,
+    height: 2000,
+    category: 'Photography',
+  },
+  {
+    id: 'photo-highlight-4',
+    src: new URL('../assets/photos/photography-highlights/img-04.JPG', import.meta.url).href,
+    alt: 'Photography highlight 4',
+    title: 'Style',
+    width: 1600,
+    height: 2000,
+    category: 'Photography',
+  },
+];
+
 export function HighlightsCarousel() {
   const { openLightbox } = useLightbox();
-
-  const highlightPhotos = highlights.map(h => {
-    const photo = photos.find(p => p.id === h.photoId);
-    return { ...h, photo };
-  }).filter(h => h.photo);
-
-  // Create array of photos for lightbox
-  const lightboxPhotos = highlightPhotos.map(h => h.photo!);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -66,31 +96,31 @@ export function HighlightsCarousel() {
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
         <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
-          {highlightPhotos.map((highlight, index) => (
+          {photographyHighlights.map((photo, index) => (
             <div
-              key={`${highlight.id}-${index}`}
+              key={photo.id}
               className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
             >
               <div
                 className="group relative aspect-[3/4] overflow-hidden cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
-                onClick={() => openLightbox(lightboxPhotos, index)}
+                onClick={() => openLightbox(photographyHighlights, index)}
               >
                 {/* Image */}
                 <img
-                  src={highlight.photo!.src}
-                  alt={highlight.photo!.alt}
+                  src={photo.src}
+                  alt={photo.alt}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                   loading="lazy"
                 />
 
-                {/* Overlay with title */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                {/* Commented out text overlay - can be re-added later */}
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     <span className="inline-block text-white/90 px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
-                      {highlight.photo!.title}
+                      {photo.title}
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Hover effect */}
                 <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all duration-300" />

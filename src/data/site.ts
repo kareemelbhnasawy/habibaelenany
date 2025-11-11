@@ -4,7 +4,7 @@ export const siteConfig = {
   photographer: {
     name: "Habiba El Enany",
     tagline: "Telling stories through light and movement.",
-    bio: "Consectetuer adipiscing elit, sed diam nonummy nibh euismod tincididunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam.",
+    bio: "Hi, I’m Habiba — a creator fueled by a deep love for visual storytelling. Through photography and film, I capture emotion and movement, freezing them in time. My purpose is to transform fleeting moments into timeless stories that inspire and endure.",
     location: "Cairo, Egypt",
     availability: "Available for shoots",
   },

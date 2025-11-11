@@ -114,11 +114,11 @@ export function Home() {
       </Section>
 
       {/* Testimonials */}
-      <Section className="bg-ink/5">
+      {/* <Section className="bg-ink/5">
         <div className="container">
           <TestimonialsCarousel />
         </div>
-      </Section>
+      </Section> */}
 
       {/* CTA Band */}
       <Section className="relative overflow-hidden min-h-[400px] md:min-h-[600px] flex items-center">

@@ -56,7 +56,8 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
 
       {/* Content */}
       <div className="relative h-full flex flex-col justify-end p-6 md:p-8 lg:p-10">
-        <motion.div
+        {/* Commented out text overlay - can be re-added later */}
+        {/* <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -70,7 +71,7 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
           <p className="text-sm text-white/70">
             {section.items.length} {section.items.length === 1 ? 'photo' : 'photos'}
           </p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Progress indicator when hovering */}
         {isHovered && section.items.length > 1 && (

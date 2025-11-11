@@ -1,11 +1,29 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { shortFormItems } from '../data/shortform';
+
+// Short Form Highlights with their images
+const shortFormHighlights = [
+  {
+    id: 'mernyth',
+    title: 'Mernyth',
+    src: new URL('../assets/photos/short-form-highlights/mernyth.JPG', import.meta.url).href,
+    alt: 'Mernyth short form content',
+  },
+  {
+    id: 'flyzone',
+    title: 'Flyzone',
+    src: new URL('../assets/photos/short-form-highlights/flyzone.PNG', import.meta.url).href,
+    alt: 'Flyzone short form content',
+  },
+  {
+    id: 'bodybar',
+    title: 'Body Bar',
+    src: new URL('../assets/photos/short-form-highlights/bodybar.PNG', import.meta.url).href,
+    alt: 'Body Bar short form content',
+  },
+];
 
 export function ShortFormContent() {
-  // Take only the first 3 items
-  const displayItems = shortFormItems.slice(0, 3);
-
   return (
     <div className="relative">
       {/* Header */}
@@ -17,7 +35,7 @@ export function ShortFormContent() {
 
       {/* Grid - 3 columns with smaller images */}
       <div className="grid md:grid-cols-3 gap-4 lg:gap-6 max-w-sm md:max-w-4xl mx-auto">
-        {displayItems.map((item, index) => (
+        {shortFormHighlights.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
@@ -35,13 +53,14 @@ export function ShortFormContent() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+              {/* Commented out text overlay - can be re-added later */}
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                 <div className="absolute inset-0 flex items-center justify-center p-4">
                   <h3 className="text-white font-display text-xl md:text-2xl lg:text-3xl font-semibold text-center">
                     {item.title}
                   </h3>
                 </div>
-              </div>
+              </div> */}
               <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all" />
             </Link>
           </motion.div>

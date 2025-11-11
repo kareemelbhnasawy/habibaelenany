@@ -2,12 +2,40 @@ import { useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { photos } from '../data/photos';
 import { useLightbox } from './LightboxProvider';
 import { cn } from '../utils/cn';
 import { Link } from 'react-router-dom';
 
-const filmmakingPhotos = photos.filter(p => p.category === 'Filmmaking');
+// Filmmaking Highlights with their dedicated images
+const filmmakingHighlights = [
+  {
+    id: 'filmmaking-highlight-1',
+    src: new URL('../assets/photos/filmaking_landpage_highlights/img-01.PNG', import.meta.url).href,
+    alt: 'Filmmaking highlight 1',
+    title: 'Production',
+    width: 1920,
+    height: 1080,
+    category: 'Filmmaking',
+  },
+  {
+    id: 'filmmaking-highlight-2',
+    src: new URL('../assets/photos/filmaking_landpage_highlights/img-02.PNG', import.meta.url).href,
+    alt: 'Filmmaking highlight 2',
+    title: 'Cinematography',
+    width: 1920,
+    height: 1080,
+    category: 'Filmmaking',
+  },
+  {
+    id: 'filmmaking-highlight-3',
+    src: new URL('../assets/photos/filmaking_landpage_highlights/img-03.PNG', import.meta.url).href,
+    alt: 'Filmmaking highlight 3',
+    title: 'Direction',
+    width: 1920,
+    height: 1080,
+    category: 'Filmmaking',
+  },
+];
 
 export function FilmmakingCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -60,14 +88,14 @@ export function FilmmakingCarousel() {
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
         <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
-          {filmmakingPhotos.map((photo, index) => (
+          {filmmakingHighlights.map((photo, index) => (
             <div
-              key={`${photo.id}-${index}`}
+              key={photo.id}
               className="flex-[0_0_90%] sm:flex-[0_0_60%] lg:flex-[0_0_40%] min-w-0"
             >
               <div
                 className="group relative aspect-video overflow-hidden cursor-pointer bg-ink/5 touch-manipulation active:scale-[0.98] transition-transform"
-                onClick={() => openLightbox(filmmakingPhotos, index)}
+                onClick={() => openLightbox(filmmakingHighlights, index)}
               >
                 {/* Image */}
                 <img
@@ -77,8 +105,8 @@ export function FilmmakingCarousel() {
                   loading="lazy"
                 />
 
-                {/* Overlay with title */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                {/* Commented out text overlay - can be re-added later */}
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     {photo.title && (
                       <span className="inline-block text-white/90 px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
@@ -86,7 +114,7 @@ export function FilmmakingCarousel() {
                       </span>
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Hover border */}
                 <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/30 transition-all duration-300" />

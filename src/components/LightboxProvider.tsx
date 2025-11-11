@@ -102,7 +102,9 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
                   {currentPhoto.category}
                 </span>
               )} */}
-              {currentPhoto.title && (
+
+                {/* Commented out text overlay - can be re-added later */}
+              {/* {currentPhoto.title && (
                 <h3
                   style={{
                     color: 'white',
@@ -115,7 +117,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
                 >
                   {currentPhoto.title}
                 </h3>
-              )}
+              )} */}
               {currentPhoto.caption && (
                 <p
                   style={{
