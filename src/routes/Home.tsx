@@ -125,9 +125,13 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80"
+            src="/src/assets/photos/refer.jpg"
             alt="Photography background"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.warn('Failed to load refer.jpg, using fallback');
+              e.currentTarget.src = "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80";
+            }}
           />
           <div className="absolute inset-0 bg-ink/60" />
         </div>
