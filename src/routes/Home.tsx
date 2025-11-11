@@ -9,6 +9,7 @@ import { Section } from '../components/Section';
 import { ParallaxSection } from '../components/ParallaxSection';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { siteConfig } from '../data/site';
+import referImage from '../assets/photos/refer.jpg';
 
 export function Home() {
   return (
@@ -124,7 +125,7 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/src/assets/photos/refer.jpg"
+            src={referImage}
             alt="Photography background"
             className="w-full h-full object-cover"
             onError={(e) => {
