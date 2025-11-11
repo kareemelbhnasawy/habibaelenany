@@ -11,7 +11,7 @@ import { ScrollReveal } from "../components/ScrollReveal";
 import { siteConfig } from "../data/site";
 
 // Import refer image properly for Vite build
-const referImage = new URL('../assets/photos/refer.jpg', import.meta.url).href;
+const referImage = new URL('../assets/photos/refer.JPG', import.meta.url).href;
 
 export function Home() {
   return (
