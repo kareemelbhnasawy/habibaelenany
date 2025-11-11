@@ -2,18 +2,17 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ImageCard } from '../components/ImageCard';
 import { useLightbox } from '../components/LightboxProvider';
-import { categories, getPhotosByCategory } from '../data/photos';
-import type { Category } from '../data/photos';
+import { photographySections } from '../data/photography';
 import { cn } from '../utils/cn';
 
 export function Photography() {
-  const [activeSection, setActiveSection] = useState<string>('Portraits');
+  const [activeSection, setActiveSection] = useState<string>('Editorial');
   const { openLightbox } = useLightbox();
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
-  const scrollToSection = (category: string) => {
-    setActiveSection(category);
-    const element = sectionRefs.current[category];
+  const scrollToSection = (sectionTitle: string) => {
+    setActiveSection(sectionTitle);
+    const element = sectionRefs.current[sectionTitle];
     if (element) {
       const offset = 100; // Account for fixed navbar
       const elementPosition = element.getBoundingClientRect().top;
@@ -26,12 +25,11 @@ export function Photography() {
     }
   };
 
-  // Filter out 'All' from categories for sections
-  const categoryList = categories.filter((cat) => cat !== 'All');
-
-  const handleImageClick = (category: Category, index: number) => {
-    const categoryPhotos = getPhotosByCategory(category);
-    openLightbox(categoryPhotos, index, true);
+  const handleImageClick = (sectionTitle: string, index: number) => {
+    const section = photographySections.find(s => s.title === sectionTitle);
+    if (section) {
+      openLightbox(section.items, index, true);
+    }
   };
 
   return (
@@ -59,20 +57,20 @@ export function Photography() {
           className="sticky top-20 z-30 bg-bg/95 backdrop-blur-md py-4 mb-12 -mx-4 px-4"
         >
           <div className="flex flex-wrap gap-0 justify-center items-center">
-            {categoryList.map((category, index) => (
-              <div key={category} className="flex items-center">
+            {photographySections.map((section, index) => (
+              <div key={section.title} className="flex items-center">
                 <button
-                  onClick={() => scrollToSection(category)}
+                  onClick={() => scrollToSection(section.title)}
                   className={cn(
                     'px-4 py-2 text-xs md:text-base font-sans font-light tracking-[0.2em] uppercase transition-all outline-none',
-                    activeSection === category
+                    activeSection === section.title
                       ? 'text-accent'
                       : 'text-ink/60 hover:text-accent'
                   )}
                 >
-                  {category}
+                  {section.title}
                 </button>
-                {index < categoryList.length - 1 && (
+                {index < photographySections.length - 1 && (
                   <div className="h-4 w-px bg-ink/20" />
                 )}
               </div>
@@ -82,17 +80,15 @@ export function Photography() {
 
         {/* Category Sections */}
         <div className="space-y-16">
-          {categoryList.map((category) => {
-            const categoryPhotos = getPhotosByCategory(category);
-
-            if (categoryPhotos.length === 0) return null;
+          {photographySections.map((section) => {
+            if (section.items.length === 0) return null;
 
             return (
               <section
-                key={category}
-                id={category}
+                key={section.title}
+                id={section.title}
                 ref={(el) => {
-                  sectionRefs.current[category] = el;
+                  sectionRefs.current[section.title] = el;
                 }}
                 className="scroll-mt-32"
               >
@@ -104,13 +100,13 @@ export function Photography() {
                   className="mb-8"
                 >
                   <h2 className="text-3xl md:text-4xl font-display font-semibold">
-                    {category}
+                    {section.title}
                   </h2>
                 </motion.div>
 
-                {/* 2-Column Masonry Grid using CSS columns */}
+                {/* 2-Column Masonry Grid */}
                 <div className="columns-2 gap-3 md:gap-4">
-                  {categoryPhotos.map((photo, index) => (
+                  {section.items.map((photo, index) => (
                     <motion.div
                       key={photo.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -122,7 +118,7 @@ export function Photography() {
                       <ImageCard
                         photo={photo}
                         index={index}
-                        onClick={() => handleImageClick(category, index)}
+                        onClick={() => handleImageClick(section.title, index)}
                       />
                     </motion.div>
                   ))}

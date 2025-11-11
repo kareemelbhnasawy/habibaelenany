@@ -38,8 +38,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
   const slides = photos.map(photo => ({
     src: photo.src,
     alt: photo.alt,
-    width: photo.width,
-    height: photo.height,
+    // Don't pass width/height - let lightbox use natural image dimensions
   }));
 
   const currentPhoto = photos[currentIndex];
