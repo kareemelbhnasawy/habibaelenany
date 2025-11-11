@@ -10,6 +10,9 @@ import { ParallaxSection } from "../components/ParallaxSection";
 import { ScrollReveal } from "../components/ScrollReveal";
 import { siteConfig } from "../data/site";
 
+// Import refer image properly for Vite build
+const referImage = new URL('../assets/photos/refer.jpg', import.meta.url).href;
+
 export function Home() {
   return (
     <main>
@@ -137,7 +140,7 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/src/assets/photos/refer.jpg"
+            src={referImage}
             alt="Photography background"
             className="w-full h-full object-cover"
             onError={(e) => {
