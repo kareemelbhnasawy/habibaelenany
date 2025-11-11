@@ -1,6 +1,52 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { shortFormItems } from '../data/shortform';
+
+// Lazy loading video component with Intersection Observer
+function LazyVideo({ src, className }: { src: string; className: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasLoaded) {
+            setIsInView(true);
+            setHasLoaded(true);
+          }
+        });
+      },
+      {
+        rootMargin: '200px', // Start loading 200px before video enters viewport
+        threshold: 0.01,
+      }
+    );
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasLoaded]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={isInView ? src : undefined}
+      className={className}
+      muted
+      loop
+      playsInline
+      autoPlay={isInView}
+      preload="none"
+    />
+  );
+}
 
 export function ShortForm() {
   // Fix iOS scroll issues at edges
@@ -85,13 +131,9 @@ export function ShortForm() {
 
                         {/* Screen */}
                         <div className="relative bg-paper rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
-                          <video
+                          <LazyVideo
                             src={mainItem.src}
                             className="w-full h-full object-cover pointer-events-none"
-                            muted
-                            loop
-                            playsInline
-                            autoPlay
                           />
                         </div>
                       </div>
@@ -139,13 +181,9 @@ export function ShortForm() {
 
                                 {/* Screen */}
                                 <div className="relative bg-paper rounded-[1.2rem] overflow-hidden aspect-[9/19.5]">
-                                  <video
+                                  <LazyVideo
                                     src={item.src}
                                     className="w-full h-full object-cover pointer-events-none"
-                                    muted
-                                    loop
-                                    playsInline
-                                    autoPlay
                                   />
                                 </div>
                               </div>
