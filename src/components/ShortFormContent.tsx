@@ -54,13 +54,13 @@ export function ShortFormContent() {
                 loading="lazy"
               />
               {/* Commented out text overlay - can be re-added later */}
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                 <div className="absolute inset-0 flex items-center justify-center p-4">
                   <h3 className="text-white font-display text-xl md:text-2xl lg:text-3xl font-semibold text-center">
                     {item.title}
                   </h3>
                 </div>
-              </div> */}
+              </div>
               <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all" />
             </Link>
           </motion.div>
