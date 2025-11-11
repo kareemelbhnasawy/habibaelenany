@@ -67,6 +67,27 @@ export function ShortForm() {
     };
   }, []);
 
+  // Scroll to section based on URL hash
+  useEffect(() => {
+    const hash = window.location.hash.slice(1); // Remove the # symbol
+    if (hash) {
+      // Wait for the page to render
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          const offset = 100; // Account for fixed navbar
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+          });
+        }
+      }, 100);
+    }
+  }, []);
+
   return (
     <main className="min-h-screen pt-24 pb-16" style={{ touchAction: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <div className="container">
@@ -100,15 +121,18 @@ export function ShortForm() {
             return Object.entries(sections).map(([title, sectionItems], sectionIndex) => {
               const mainItem = sectionItems[0];
               const smallItems = sectionItems.slice(1);
+              // Create URL-friendly ID from title (e.g., "Mernyth" -> "mernyth")
+              const sectionId = title.toLowerCase().replace(/\s+/g, '-');
 
               return (
                 <motion.div
                   key={title}
+                  id={sectionId}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "0px", amount: 0.1 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="flex flex-col md:grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 lg:gap-16"
+                  className="flex flex-col md:grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 lg:gap-16 scroll-mt-24"
                   style={{ willChange: 'auto' }}
                 >
                   {/* Large Mobile Container */}

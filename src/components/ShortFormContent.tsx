@@ -16,7 +16,7 @@ const shortFormHighlights = [
     alt: 'Flyzone short form content',
   },
   {
-    id: 'bodybar',
+    id: 'body-bar',
     title: 'Body Bar',
     src: new URL('../assets/photos/short-form-highlights/bodybar.PNG', import.meta.url).href,
     alt: 'Body Bar short form content',
@@ -44,7 +44,7 @@ export function ShortFormContent() {
             transition={{ delay: index * 0.1 }}
           >
             <Link
-              to="/short-form"
+              to={`/short-form#${item.id}`}
               className="group block relative aspect-[9/16] overflow-hidden focus-ring touch-manipulation active:scale-[0.98] transition-transform max-w-[200px] md:max-w-none mx-auto"
             >
               <img

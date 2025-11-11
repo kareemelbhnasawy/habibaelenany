@@ -15,7 +15,7 @@ export interface PhotographyItem {
 const editorialItems: PhotographyItem[] = [
   {
     id: 'editorial-1',
-    src: new URL('../assets/photos/photography/editorial/img-01.JPG', import.meta.url).href,
+    src: new URL('../assets/photos/photography/editorial/img-01.jpg', import.meta.url).href,
     width: 4,
     height: 5,
     alt: 'Editorial photography',
@@ -25,7 +25,7 @@ const editorialItems: PhotographyItem[] = [
   },
   {
     id: 'editorial-2',
-    src: new URL('../assets/photos/photography/editorial/img-02.JPG', import.meta.url).href,
+    src: new URL('../assets/photos/photography/editorial/img-02.jpg', import.meta.url).href,
     width: 3,
     height: 4,
     alt: 'Editorial fashion',
@@ -35,7 +35,7 @@ const editorialItems: PhotographyItem[] = [
   },
   {
     id: 'editorial-3',
-    src: new URL('../assets/photos/photography/editorial/img-03.JPG', import.meta.url).href,
+    src: new URL('../assets/photos/photography/editorial/img-03.jpg', import.meta.url).href,
     width: 4,
     height: 3,
     alt: 'Editorial styling',
@@ -45,7 +45,7 @@ const editorialItems: PhotographyItem[] = [
   },
   {
     id: 'editorial-4',
-    src: new URL('../assets/photos/photography/editorial/img-04.JPG', import.meta.url).href,
+    src: new URL('../assets/photos/photography/editorial/img-04.jpg', import.meta.url).href,
     width: 2,
     height: 3,
     alt: 'Editorial concept',
