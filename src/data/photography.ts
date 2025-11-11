@@ -132,8 +132,9 @@ const portraitsItems: PhotographyItem[] = Array.from({ length: 4 }, (_, i) => ({
   year: 2024,
 }));
 
-// Products Photos (starts from img-02) - varied aspect ratios
+// Products Photos - varied aspect ratios
 const productsAspectRatios = [
+  { width: 3, height: 4 },   // img-01: portrait
   { width: 1, height: 1 },   // img-02: square
   { width: 4, height: 3 },   // img-03: landscape
   { width: 3, height: 4 },   // img-04: portrait
@@ -143,12 +144,12 @@ const productsAspectRatios = [
   { width: 3, height: 4 },   // img-08: portrait
 ];
 
-const productsItems: PhotographyItem[] = Array.from({ length: 7 }, (_, i) => ({
-  id: `products-${i + 2}`,
-  src: new URL(`../assets/photos/photography/products/img-${String(i + 2).padStart(2, '0')}.JPG`, import.meta.url).href,
+const productsItems: PhotographyItem[] = Array.from({ length: 8 }, (_, i) => ({
+  id: `products-${i + 1}`,
+  src: new URL(`../assets/photos/photography/products/img-${String(i + 1).padStart(2, '0')}.JPG`, import.meta.url).href,
   width: productsAspectRatios[i].width,
   height: productsAspectRatios[i].height,
-  alt: `Product photography ${i + 2}`,
+  alt: `Product photography ${i + 1}`,
   category: 'Photography',
   section: 'Products',
   year: 2024,
