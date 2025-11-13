@@ -1,22 +1,50 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLightbox } from '../components/LightboxProvider';
 import { filmmakingItems, filmmakingSections } from '../data/filmmaking';
 
 function SectionContainer({ section, sectionIndex }: { section: typeof filmmakingSections[0]; sectionIndex: number }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const { openLightbox } = useLightbox();
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Intersection Observer to detect when section is in viewport
   useEffect(() => {
-    if (!isHovered || section.items.length <= 1) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+          if (!entry.isIntersecting) {
+            setCurrentImageIndex(0); // Reset to first image when leaving viewport
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of section is visible
+      }
+    );
+
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Slideshow effect when in view
+  useEffect(() => {
+    if (!isInView || section.items.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % section.items.length);
     }, 800); // Change image every 800ms
 
     return () => clearInterval(interval);
-  }, [isHovered, section.items.length]);
+  }, [isInView, section.items.length]);
 
   const handleClick = () => {
     const globalIndex = filmmakingItems.findIndex(i => i.id === section.items[currentImageIndex].id);
@@ -25,16 +53,12 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px", amount: 0.1 }}
       transition={{ duration: 0.4, delay: sectionIndex * 0.05 }}
       className="relative h-full overflow-hidden bg-paper border border-ink/10 cursor-pointer group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setCurrentImageIndex(0);
-      }}
       onClick={handleClick}
     >
       {/* Background Image */}
@@ -45,6 +69,7 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
             src={item.src}
             alt={item.alt}
             className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: idx === currentImageIndex ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -73,8 +98,8 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
           </p>
         </motion.div> */}
 
-        {/* Progress indicator when hovering */}
-        {isHovered && section.items.length > 1 && (
+        {/* Progress indicator when section is in view */}
+        {isInView && section.items.length > 1 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -114,12 +139,12 @@ export function Filmmaking() {
           </p>
         </motion.div>
 
-        {/* Sections Grid - 2 columns */}
+        {/* Sections Grid - 2 columns on desktop, 1 on mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {filmmakingSections.map((section, index) => (
             <div
               key={section.title}
-              className="h-[60vh] md:h-[70vh] lg:h-[75vh]"
+              className="w-full aspect-video"
             >
               <SectionContainer section={section} sectionIndex={index} />
             </div>

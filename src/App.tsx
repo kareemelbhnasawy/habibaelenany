@@ -1,18 +1,19 @@
-import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Navbar } from './components/Navbar';
-import { Footer } from './components/Footer';
-import { FloatingContactBubble } from './components/FloatingContactBubble';
-import { LightboxProvider } from './components/LightboxProvider';
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
+import { AnimatePresence, motion } from "framer-motion";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
+import { FloatingContactBubble } from "./components/FloatingContactBubble";
+import { LightboxProvider } from "./components/LightboxProvider";
 // import { PageLoader } from './components/PageLoader';
-import { Home } from './routes/Home';
-import { Photography } from './routes/Photography';
-import { Filmmaking } from './routes/Filmmaking';
-import { ShortForm } from './routes/ShortForm';
-import { NotFound } from './routes/NotFound';
-import { siteConfig } from './data/site';
+import { Home } from "./routes/Home";
+import { Photography } from "./routes/Photography";
+import { Filmmaking } from "./routes/Filmmaking";
+import { ShortForm } from "./routes/ShortForm";
+import { NotFound } from "./routes/NotFound";
+import { siteConfig } from "./data/site";
+import { PageLoader } from "./components/PageLoader";
 
 function SEO({ title, description }: { title?: string; description?: string }) {
   const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
@@ -42,7 +43,7 @@ function AnimatedRoutes() {
   // Scroll to top on route change - instant for iOS compatibility
   useEffect(() => {
     // Use instant behavior for iOS to prevent janky scrolling
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     // Force scroll position for iOS Safari
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -60,7 +61,7 @@ function AnimatedRoutes() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: 'anticipate' }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
               >
                 <Home />
               </motion.div>
@@ -71,12 +72,15 @@ function AnimatedRoutes() {
           path="/photography"
           element={
             <>
-              <SEO title="Photography" description="Explore my photography portfolio" />
+              <SEO
+                title="Photography"
+                description="Explore my photography portfolio"
+              />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: 'anticipate' }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
               >
                 <Photography />
               </motion.div>
@@ -87,12 +91,15 @@ function AnimatedRoutes() {
           path="/filmmaking"
           element={
             <>
-              <SEO title="Filmmaking" description="Cinematic frames and film production moments" />
+              <SEO
+                title="Filmmaking"
+                description="Cinematic frames and film production moments"
+              />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: 'anticipate' }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
               >
                 <Filmmaking />
               </motion.div>
@@ -103,12 +110,15 @@ function AnimatedRoutes() {
           path="/short-form"
           element={
             <>
-              <SEO title="Short Form Content" description="Vertical storytelling for the digital age" />
+              <SEO
+                title="Short Form Content"
+                description="Vertical storytelling for the digital age"
+              />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: 'anticipate' }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
               >
                 <ShortForm />
               </motion.div>
@@ -124,7 +134,7 @@ function AnimatedRoutes() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: 'anticipate' }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
               >
                 <NotFound />
               </motion.div>
@@ -137,22 +147,22 @@ function AnimatedRoutes() {
 }
 
 function App() {
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   // Simulate initial load
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 2000);
+  useEffect(() => {
+    // Simulate initial load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <LightboxProvider>
-          {/* <PageLoader isLoading={isLoading} /> */}
+          <PageLoader isLoading={isLoading} />
           <Navbar />
           <AnimatedRoutes />
           <Footer />

@@ -53,8 +53,8 @@ export function ShortFormContent() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
                 loading="lazy"
               />
-              {/* Commented out text overlay - can be re-added later */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+              {/* Text overlay - always visible */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent">
                 <div className="absolute inset-0 flex items-center justify-center p-4">
                   <h3 className="text-white font-display text-xl md:text-2xl lg:text-3xl font-semibold text-center">
                     {item.title}

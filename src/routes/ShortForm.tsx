@@ -1,9 +1,70 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
+import { Play, X } from 'lucide-react';
 import { shortFormItems } from '../data/shortform';
 
-// Lazy loading video component with Intersection Observer
-function LazyVideo({ src, className }: { src: string; className: string }) {
+// Video lightbox modal component
+function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (isOpen && videoRef.current) {
+      videoRef.current.play();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+      onClick={onClose}
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-50 text-white hover:text-white/70 transition-colors"
+        aria-label="Close video"
+      >
+        <X className="w-8 h-8" />
+      </button>
+
+      {/* Video container */}
+      <div
+        className="relative w-full max-w-[90vh] aspect-[9/16] mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <video
+          ref={videoRef}
+          src={src}
+          className="w-full h-full object-contain"
+          controls
+          playsInline
+          loop
+        />
+      </div>
+    </div>
+  );
+}
+
+// Lazy loading video preview component
+function LazyVideoPreview({ src, className, onClick }: { src: string; className: string; onClick: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -22,7 +83,7 @@ function LazyVideo({ src, className }: { src: string; className: string }) {
         });
       },
       {
-        rootMargin: '200px', // Start loading 200px before video enters viewport
+        rootMargin: '200px',
         threshold: 0.01,
       }
     );
@@ -34,21 +95,44 @@ function LazyVideo({ src, className }: { src: string; className: string }) {
     };
   }, [hasLoaded]);
 
+  // Set video to middle frame when loaded
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement || !isInView) return;
+
+    const handleLoadedMetadata = () => {
+      videoElement.currentTime = videoElement.duration / 2;
+    };
+
+    videoElement.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+    return () => {
+      videoElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
+  }, [isInView]);
+
   return (
-    <video
-      ref={videoRef}
-      src={isInView ? src : undefined}
-      className={className}
-      muted
-      loop
-      playsInline
-      autoPlay={isInView}
-      preload="none"
-    />
+    <div className="relative w-full h-full cursor-pointer" onClick={onClick}>
+      <video
+        ref={videoRef}
+        src={isInView ? src : undefined}
+        className={className}
+        muted
+        playsInline
+        preload="metadata"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-all">
+          <Play className="w-6 h-6 md:w-8 md:h-8 text-ink ml-1" fill="currentColor" />
+        </div>
+      </div>
+    </div>
   );
 }
 
 export function ShortForm() {
+  const [lightboxVideo, setLightboxVideo] = useState<string | null>(null);
+
   // Fix iOS scroll issues at edges
   useEffect(() => {
     // Ensure smooth scrolling at page boundaries
@@ -155,9 +239,10 @@ export function ShortForm() {
 
                         {/* Screen */}
                         <div className="relative bg-paper rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
-                          <LazyVideo
+                          <LazyVideoPreview
                             src={mainItem.src}
-                            className="w-full h-full object-cover pointer-events-none"
+                            className="w-full h-full object-cover"
+                            onClick={() => setLightboxVideo(mainItem.src)}
                           />
                         </div>
                       </div>
@@ -205,9 +290,10 @@ export function ShortForm() {
 
                                 {/* Screen */}
                                 <div className="relative bg-paper rounded-[1.2rem] overflow-hidden aspect-[9/19.5]">
-                                  <LazyVideo
+                                  <LazyVideoPreview
                                     src={item.src}
-                                    className="w-full h-full object-cover pointer-events-none"
+                                    className="w-full h-full object-cover"
+                                    onClick={() => setLightboxVideo(item.src)}
                                   />
                                 </div>
                               </div>
@@ -226,6 +312,13 @@ export function ShortForm() {
           })()}
         </div>
       </div>
+
+      {/* Video Lightbox Modal */}
+      <VideoLightbox
+        src={lightboxVideo || ''}
+        isOpen={!!lightboxVideo}
+        onClose={() => setLightboxVideo(null)}
+      />
     </main>
   );
 }

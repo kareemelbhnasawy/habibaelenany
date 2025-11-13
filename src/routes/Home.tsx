@@ -143,6 +143,7 @@ export function Home() {
             src={referImage}
             alt="Photography background"
             className="w-full h-full object-cover"
+            style={{ objectPosition: '60% center' }}
             onError={(e) => {
               console.warn("Failed to load refer.jpg, using fallback");
               e.currentTarget.src =
