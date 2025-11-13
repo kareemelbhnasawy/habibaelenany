@@ -9,9 +9,18 @@ function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean;
 
   useEffect(() => {
     if (isOpen && videoRef.current) {
-      videoRef.current.play();
+      // Load the video and play it
+      videoRef.current.load();
+      const playPromise = videoRef.current.play();
+
+      // Handle play promise to ensure controls are activated
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented, but controls will still be visible
+        });
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, src]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -47,16 +56,27 @@ function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean;
 
       {/* Video container */}
       <div
-        className="relative w-full max-w-[90vh] aspect-[9/16] mx-4"
+        className="relative w-full h-[80vh] max-w-[45vh] mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <video
           ref={videoRef}
           src={src}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain bg-black"
           controls
+          controlsList="nodownload"
           playsInline
+          webkit-playsinline="true"
+          disablePictureInPicture
           loop
+          autoPlay
+          style={{
+            display: 'block',
+            maxHeight: '80vh',
+            minHeight: '400px',
+            margin: '0 auto',
+            outline: 'none'
+          }}
         />
       </div>
     </div>
