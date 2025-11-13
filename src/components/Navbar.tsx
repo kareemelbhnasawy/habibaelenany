@@ -72,13 +72,13 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             {siteConfig.nav.links.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  "text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase transition-all px-3 py-2 relative outline-none",
+                  "text-xs font-sans font-light tracking-[0.2em] uppercase transition-all px-2 py-2 relative outline-none whitespace-nowrap",
                   location.pathname === link.href
                     ? "text-accent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent"
                     : "text-ink hover:text-accent"
@@ -92,7 +92,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 outline-none relative z-[110]"
+            className="lg:hidden p-2 outline-none relative z-[110]"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
