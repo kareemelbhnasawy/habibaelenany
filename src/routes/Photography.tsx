@@ -45,7 +45,7 @@ export function Photography() {
             Photography
           </h1>
           <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
-            A curated collection of my work capturing moments, emotions, and stories through the lens.
+            A curated collection of my work capturing moments, emotions, and stories.
           </p>
         </motion.div>
 

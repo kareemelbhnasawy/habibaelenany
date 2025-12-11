@@ -85,6 +85,39 @@ const editorialItems: PhotographyItem[] = [
   },
 ];
 
+// Fashion Photos - varied aspect ratios
+const fashionAspectRatios = [
+  { width: 3, height: 4 },   // 1: portrait
+  { width: 4, height: 5 },   // 2: portrait
+  { width: 3, height: 4 },   // 3: portrait
+  { width: 16, height: 9 },  // 4: landscape
+  { width: 3, height: 4 },   // 5: portrait
+  { width: 4, height: 3 },   // 6: landscape
+  { width: 3, height: 4 },   // 7: portrait
+  { width: 1, height: 1 },   // 8: square
+  { width: 4, height: 5 },   // 9: portrait
+  { width: 3, height: 4 },   // 10: portrait
+  { width: 16, height: 9 },  // 11: landscape
+  { width: 3, height: 4 },   // 12: portrait
+  { width: 4, height: 5 },   // 13: portrait
+  { width: 3, height: 4 },   // 14: portrait
+  { width: 2, height: 3 },   // 15: tall portrait
+  { width: 4, height: 5 },   // 16: portrait
+  { width: 3, height: 4 },   // 17: portrait
+  { width: 16, height: 9 },  // 18: landscape
+];
+
+const fashionItems: PhotographyItem[] = Array.from({ length: 18 }, (_, i) => ({
+  id: `fashion-${i + 1}`,
+  src: new URL(`../assets/photos/photography/fashion/${i + 1}.jpeg`, import.meta.url).href,
+  width: fashionAspectRatios[i].width,
+  height: fashionAspectRatios[i].height,
+  alt: `Fashion photography ${i + 1}`,
+  category: 'Photography',
+  section: 'Fashion',
+  year: 2024,
+}));
+
 // Outdoor Photos - varied aspect ratios
 const outdoorAspectRatios = [
   { width: 3, height: 4 },   // img-01: portrait
@@ -100,11 +133,13 @@ const outdoorAspectRatios = [
   { width: 2, height: 3 },   // img-11: tall portrait
   { width: 4, height: 5 },   // img-12: portrait
   { width: 16, height: 9 },  // img-13: landscape
+  { width: 3, height: 4 },   // img-14: portrait
+  { width: 4, height: 5 },   // img-15: portrait
 ];
 
-const outdoorItems: PhotographyItem[] = Array.from({ length: 13 }, (_, i) => ({
+const outdoorItems: PhotographyItem[] = Array.from({ length: 15 }, (_, i) => ({
   id: `outdoor-${i + 1}`,
-  src: new URL(`../assets/photos/photography/outdoor/img-${String(i + 1).padStart(2, '0')}.${i === 10 ? 'jpg' : 'JPG'}`, import.meta.url).href,
+  src: new URL(`../assets/photos/photography/outdoor/img-${String(i + 1).padStart(2, '0')}.${i === 10 ? 'jpg' : (i >= 13 ? 'jpeg' : 'JPG')}`, import.meta.url).href,
   width: outdoorAspectRatios[i].width,
   height: outdoorAspectRatios[i].height,
   alt: `Outdoor photography ${i + 1}`,
@@ -157,6 +192,7 @@ const productsItems: PhotographyItem[] = Array.from({ length: 8 }, (_, i) => ({
 
 // Export all items combined
 export const photographyItems: PhotographyItem[] = [
+  ...fashionItems,
   ...editorialItems,
   ...outdoorItems,
   ...portraitsItems,
@@ -165,6 +201,11 @@ export const photographyItems: PhotographyItem[] = [
 
 // Export sections separately for grouped display
 export const photographySections = [
+  {
+    title: 'Fashion',
+    description: 'Fashion photography and styling',
+    items: fashionItems,
+  },
   {
     title: 'Editorial',
     description: 'Fashion and editorial photography',

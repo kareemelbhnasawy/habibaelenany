@@ -135,7 +135,7 @@ export function Filmmaking() {
             Filmmaking
           </h1>
           <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
-            Cinematic frames and behind-the-scenes moments from film productions.
+            Cinematic frames from film productions.
           </p>
         </motion.div>
 
