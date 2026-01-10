@@ -67,7 +67,7 @@ export function EditMediaModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl">
+      <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl max-h-[90vh] flex flex-col m-4">
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <h3 className="text-lg font-medium text-white">Edit Media Details</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
@@ -75,10 +75,10 @@ export function EditMediaModal({
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="p-6 space-y-4">
+        <form onSubmit={handleSave} className="p-6 space-y-4 overflow-y-auto">
           {/* Preview */}
-          <div className="flex gap-4">
-            <div className="w-24 h-24 bg-black rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="w-full sm:w-24 h-40 sm:h-24 bg-black rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
               {item.type === "video" ? (
                 <video src={item.url} className="w-full h-full object-cover" />
               ) : (
