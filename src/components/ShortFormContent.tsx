@@ -1,29 +1,22 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useMedia } from "../hooks/useContent";
 
 // Short Form Highlights with their images
-const shortFormHighlights = [
-  {
-    id: 'mernyth',
-    title: 'Mernyth',
-    src: new URL('../assets/photos/short-form-highlights/mernyth.JPG', import.meta.url).href,
-    alt: 'Mernyth short form content',
-  },
-  {
-    id: 'flyzone',
-    title: 'Flyzone',
-    src: new URL('../assets/photos/short-form-highlights/flyzone.jpg', import.meta.url).href,
-    alt: 'Flyzone short form content',
-  },
-  {
-    id: 'body-bar',
-    title: 'Body Bar',
-    src: new URL('../assets/photos/short-form-highlights/bodybar.PNG', import.meta.url).href,
-    alt: 'Body Bar short form content',
-  },
-];
-
 export function ShortFormContent() {
+  // Fetch highlights for Short Form specifically
+  const { items } = useMedia({
+    category: "Short Form",
+    isHighlight: true,
+    limit: 3,
+  });
+
+  const shortFormHighlights = items.map((item) => ({
+    id: item.title ? item.title.toLowerCase().replace(/\s+/g, "-") : item.id,
+    title: item.title || "Untitled",
+    src: item.url,
+    alt: item.title || "Short Form Content",
+  }));
   return (
     <div className="relative">
       {/* Header */}

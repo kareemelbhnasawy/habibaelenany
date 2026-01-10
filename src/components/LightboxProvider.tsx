@@ -1,19 +1,21 @@
-import { createContext, useContext, useState } from 'react';
-import type { ReactNode } from 'react';
-import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
-import type { Photo } from '../data/photos';
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import type { Photo } from "../types/database";
 
 interface LightboxContextType {
   openLightbox: (photos: Photo[], index: number, hideCaption?: boolean) => void;
 }
 
-const LightboxContext = createContext<LightboxContextType | undefined>(undefined);
+const LightboxContext = createContext<LightboxContextType | undefined>(
+  undefined
+);
 
 export function useLightbox() {
   const context = useContext(LightboxContext);
   if (!context) {
-    throw new Error('useLightbox must be used within LightboxProvider');
+    throw new Error("useLightbox must be used within LightboxProvider");
   }
   return context;
 }
@@ -28,14 +30,18 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hideCaption, setHideCaption] = useState(false);
 
-  const openLightbox = (newPhotos: Photo[], index: number, hideCaptionFlag = false) => {
+  const openLightbox = (
+    newPhotos: Photo[],
+    index: number,
+    hideCaptionFlag = false
+  ) => {
     setPhotos(newPhotos);
     setCurrentIndex(index);
     setHideCaption(hideCaptionFlag);
     setIsOpen(true);
   };
 
-  const slides = photos.map(photo => ({
+  const slides = photos.map((photo) => ({
     src: photo.src,
     alt: photo.alt,
     // Don't pass width/height - let lightbox use natural image dimensions
@@ -46,7 +52,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
   return (
     <LightboxContext.Provider value={{ openLightbox }}>
       {children}
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: "relative" }}>
         <Lightbox
           open={isOpen}
           close={() => setIsOpen(false)}
@@ -66,23 +72,24 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
           <div
             className="lightbox-custom-caption"
             style={{
-              position: 'fixed',
+              position: "fixed",
               bottom: 0,
               left: 0,
               right: 0,
               zIndex: 2147483647,
-              background: 'linear-gradient(to top, rgba(18, 18, 18, 0.95) 0%, rgba(18, 18, 18, 0.8) 60%, transparent 100%)',
-              padding: '3rem 2rem 2rem',
-              pointerEvents: 'none',
+              background:
+                "linear-gradient(to top, rgba(18, 18, 18, 0.95) 0%, rgba(18, 18, 18, 0.8) 60%, transparent 100%)",
+              padding: "3rem 2rem 2rem",
+              pointerEvents: "none",
             }}
           >
             <div
               style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
+                maxWidth: "1200px",
+                margin: "0 auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
               }}
             >
               {/* Category Badge - Commented out */}
@@ -103,7 +110,7 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
                 </span>
               )} */}
 
-                {/* Commented out text overlay - can be re-added later */}
+              {/* Commented out text overlay - can be re-added later */}
               {/* {currentPhoto.title && (
                 <h3
                   style={{
@@ -121,12 +128,12 @@ export function LightboxProvider({ children }: LightboxProviderProps) {
               {currentPhoto.caption && (
                 <p
                   style={{
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: "rgba(255, 255, 255, 0.8)",
                     fontFamily: "'Inter', system-ui, sans-serif",
-                    fontSize: '0.875rem',
-                    lineHeight: '1.5',
-                    margin: '0.5rem 0 0 0',
-                    maxWidth: '600px',
+                    fontSize: "0.875rem",
+                    lineHeight: "1.5",
+                    margin: "0.5rem 0 0 0",
+                    maxWidth: "600px",
                   }}
                 >
                   {currentPhoto.caption}

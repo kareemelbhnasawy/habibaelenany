@@ -14,6 +14,18 @@ import { ShortForm } from "./routes/ShortForm";
 import { NotFound } from "./routes/NotFound";
 import { siteConfig } from "./data/site";
 import { PageLoader } from "./components/PageLoader";
+import { AuthProvider } from "./context/AuthContext";
+import { Login } from "./routes/Login";
+import { DashboardLayout } from "./components/admin/DashboardLayout";
+import { AuthGuard } from "./components/admin/AuthGuard";
+import { MediaLibrary } from "./routes/admin/MediaLibrary";
+import { Migration } from "./routes/admin/Migration";
+import { HomePageEditor } from "./routes/admin/pages/HomePageEditor";
+import { PhotographyPageEditor } from "./routes/admin/pages/PhotographyPageEditor";
+import { FilmmakingPageEditor } from "./routes/admin/pages/FilmmakingPageEditor";
+import { ShortFormPageEditor } from "./routes/admin/pages/ShortFormPageEditor";
+import { SettingsPage } from "./routes/admin/pages/SettingsPage";
+import { DashboardOverview } from "./routes/admin/DashboardOverview";
 
 function SEO({ title, description }: { title?: string; description?: string }) {
   const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
@@ -160,15 +172,52 @@ function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <LightboxProvider>
-          <PageLoader isLoading={isLoading} />
-          <Navbar />
-          <AnimatedRoutes />
-          <Footer />
-          <FloatingContactBubble />
-        </LightboxProvider>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <LightboxProvider>
+            <PageLoader isLoading={isLoading} />
+            <Routes>
+              {/* Public Routes - Wrapped in MainLayout implicitly via composition in the original code, 
+                  but here we are restructuring. The original code rendered Navbar/Footer globally.
+                  We need to make sure Navbar/Footer don't show on Admin pages. 
+               */}
+              <Route
+                element={
+                  <>
+                    <Navbar />
+                    <main>
+                      <AnimatedRoutes />
+                    </main>
+                    <Footer />
+                    <FloatingContactBubble />
+                  </>
+                }
+                path="/*"
+              />
+
+              {/* Admin Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/admin"
+                element={
+                  <AuthGuard>
+                    <DashboardLayout />
+                  </AuthGuard>
+                }
+              >
+                <Route index element={<DashboardOverview />} />
+                <Route path="media" element={<MediaLibrary />} />
+                <Route path="home" element={<HomePageEditor />} />
+                <Route path="photography" element={<PhotographyPageEditor />} />
+                <Route path="filmmaking" element={<FilmmakingPageEditor />} />
+                <Route path="short-form" element={<ShortFormPageEditor />} />
+                <Route path="migration" element={<Migration />} />
+                <Route path="settings" element={<SettingsPage />} />
+              </Route>
+            </Routes>
+          </LightboxProvider>
+        </BrowserRouter>
+      </AuthProvider>
     </HelmetProvider>
   );
 }

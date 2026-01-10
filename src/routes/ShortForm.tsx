@@ -1,10 +1,18 @@
-import { motion } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
-import { Play, X } from 'lucide-react';
-import { shortFormItems } from '../data/shortform';
+import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { Play, X } from "lucide-react";
+import { useMedia } from "../hooks/useContent";
 
 // Video lightbox modal component
-function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean; onClose: () => void }) {
+function VideoLightbox({
+  src,
+  isOpen,
+  onClose,
+}: {
+  src: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -24,17 +32,17 @@ function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean;
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -71,11 +79,11 @@ function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean;
           loop
           autoPlay
           style={{
-            display: 'block',
-            maxHeight: '80vh',
-            minHeight: '400px',
-            margin: '0 auto',
-            outline: 'none'
+            display: "block",
+            maxHeight: "80vh",
+            minHeight: "400px",
+            margin: "0 auto",
+            outline: "none",
           }}
         />
       </div>
@@ -84,7 +92,15 @@ function VideoLightbox({ src, isOpen, onClose }: { src: string; isOpen: boolean;
 }
 
 // Lazy loading video preview component
-function LazyVideoPreview({ src, className, onClick }: { src: string; className: string; onClick: () => void }) {
+function LazyVideoPreview({
+  src,
+  className,
+  onClick,
+}: {
+  src: string;
+  className: string;
+  onClick: () => void;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -103,7 +119,7 @@ function LazyVideoPreview({ src, className, onClick }: { src: string; className:
         });
       },
       {
-        rootMargin: '200px',
+        rootMargin: "200px",
         threshold: 0.01,
       }
     );
@@ -124,10 +140,10 @@ function LazyVideoPreview({ src, className, onClick }: { src: string; className:
       videoElement.currentTime = videoElement.duration / 2;
     };
 
-    videoElement.addEventListener('loadedmetadata', handleLoadedMetadata);
+    videoElement.addEventListener("loadedmetadata", handleLoadedMetadata);
 
     return () => {
-      videoElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      videoElement.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
   }, [isInView]);
 
@@ -143,7 +159,10 @@ function LazyVideoPreview({ src, className, onClick }: { src: string; className:
       />
       <div className="absolute inset-0 flex items-center justify-center bg-black/20">
         <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-all">
-          <Play className="w-6 h-6 md:w-8 md:h-8 text-ink ml-1" fill="currentColor" />
+          <Play
+            className="w-6 h-6 md:w-8 md:h-8 text-ink ml-1"
+            fill="currentColor"
+          />
         </div>
       </div>
     </div>
@@ -152,22 +171,23 @@ function LazyVideoPreview({ src, className, onClick }: { src: string; className:
 
 export function ShortForm() {
   const [lightboxVideo, setLightboxVideo] = useState<string | null>(null);
+  const { items, loading } = useMedia({ category: "Short Form" });
 
   // Fix iOS scroll issues at edges
   useEffect(() => {
     // Ensure smooth scrolling at page boundaries
     const preventScrollLock = () => {
-      document.body.style.overflowY = 'scroll';
+      document.body.style.overflowY = "scroll";
       // @ts-expect-error - webkit prefix for iOS
-      document.body.style.webkitOverflowScrolling = 'touch';
+      document.body.style.webkitOverflowScrolling = "touch";
     };
 
     preventScrollLock();
 
     return () => {
-      document.body.style.overflowY = '';
+      document.body.style.overflowY = "";
       // @ts-expect-error - webkit prefix for iOS
-      document.body.style.webkitOverflowScrolling = '';
+      document.body.style.webkitOverflowScrolling = "";
     };
   }, []);
 
@@ -185,15 +205,26 @@ export function ShortForm() {
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
         }
       }, 100);
     }
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center pt-24">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <main className="min-h-screen pt-24 pb-16" style={{ touchAction: 'auto', WebkitOverflowScrolling: 'touch' }}>
+    <main
+      className="min-h-screen pt-24 pb-16"
+      style={{ touchAction: "auto", WebkitOverflowScrolling: "touch" }}
+    >
       <div className="container">
         {/* Header */}
         <motion.div
@@ -214,19 +245,30 @@ export function ShortForm() {
         <div className="max-w-7xl mx-auto space-y-24 md:space-y-32">
           {(() => {
             // Group items by title (section)
-            const sections: { [key: string]: typeof shortFormItems } = {};
-            shortFormItems.forEach(item => {
-              if (!sections[item.title]) {
-                sections[item.title] = [];
+            const sections: { [key: string]: any[] } = {};
+            // Sort by creation date or a specific order field if available (omitted for now)
+            // Prioritize by title order as before?
+            // Mernyth, Flyzone, Body Bar
+            const preferredOrder = ["Mernyth", "Flyzone", "Body Bar"];
+
+            items.forEach((item) => {
+              const title = item.title || "Untitled";
+              if (!sections[title]) {
+                sections[title] = [];
               }
-              sections[item.title].push(item);
+              sections[title].push(item);
             });
 
-            return Object.entries(sections).map(([title, sectionItems], sectionIndex) => {
+            const sortedKeys = Object.keys(sections).sort((a, b) => {
+              return preferredOrder.indexOf(a) - preferredOrder.indexOf(b);
+            });
+
+            return sortedKeys.map((title, sectionIndex) => {
+              const sectionItems = sections[title];
               const mainItem = sectionItems[0];
               const smallItems = sectionItems.slice(1);
-              // Create URL-friendly ID from title (e.g., "Mernyth" -> "mernyth")
-              const sectionId = title.toLowerCase().replace(/\s+/g, '-');
+              // Create URL-friendly ID from title
+              const sectionId = title.toLowerCase().replace(/\s+/g, "-");
 
               return (
                 <motion.div
@@ -237,12 +279,14 @@ export function ShortForm() {
                   viewport={{ once: true, margin: "0px", amount: 0.1 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                   className="flex flex-col md:grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 lg:gap-16 scroll-mt-24"
-                  style={{ willChange: 'auto' }}
+                  style={{ willChange: "auto" }}
                 >
                   {/* Large Mobile Container */}
-                  <div className={`relative mx-auto md:mx-0 flex items-center justify-center ${
-                    sectionIndex % 2 === 1 ? 'md:order-2' : 'md:order-1'
-                  }`}>
+                  <div
+                    className={`relative mx-auto md:mx-0 flex items-center justify-center ${
+                      sectionIndex % 2 === 1 ? "md:order-2" : "md:order-1"
+                    }`}
+                  >
                     {/* iPhone-like container - Large */}
                     <div className="relative w-[220px] sm:w-[240px] md:w-[260px] lg:w-[300px] shrink-0">
                       {/* Phone frame */}
@@ -260,9 +304,9 @@ export function ShortForm() {
                         {/* Screen */}
                         <div className="relative bg-paper rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
                           <LazyVideoPreview
-                            src={mainItem.src}
+                            src={mainItem.url}
                             className="w-full h-full object-cover"
-                            onClick={() => setLightboxVideo(mainItem.src)}
+                            onClick={() => setLightboxVideo(mainItem.url)}
                           />
                         </div>
                       </div>
@@ -273,9 +317,11 @@ export function ShortForm() {
                   </div>
 
                   {/* Text + Small Phones */}
-                  <div className={`flex flex-col gap-8 ${
-                    sectionIndex % 2 === 1 ? 'md:order-1' : 'md:order-2'
-                  }`}>
+                  <div
+                    className={`flex flex-col gap-8 ${
+                      sectionIndex % 2 === 1 ? "md:order-1" : "md:order-2"
+                    }`}
+                  >
                     {/* Content/Text Section */}
                     <div className="text-center md:text-left">
                       <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-4">
@@ -295,7 +341,10 @@ export function ShortForm() {
                     {smallItems.length > 0 && (
                       <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto md:mx-0">
                         {smallItems.map((item, i) => (
-                          <div key={i} className="relative w-full max-w-[100px] sm:max-w-[120px]">
+                          <div
+                            key={i}
+                            className="relative w-full max-w-[100px] sm:max-w-[120px]"
+                          >
                             {/* Small iPhone-like container */}
                             <div className="relative w-full">
                               {/* Phone frame */}
@@ -311,9 +360,9 @@ export function ShortForm() {
                                 {/* Screen */}
                                 <div className="relative bg-paper rounded-[1.2rem] overflow-hidden aspect-[9/19.5]">
                                   <LazyVideoPreview
-                                    src={item.src}
+                                    src={item.url}
                                     className="w-full h-full object-cover"
-                                    onClick={() => setLightboxVideo(item.src)}
+                                    onClick={() => setLightboxVideo(item.url)}
                                   />
                                 </div>
                               </div>
@@ -335,7 +384,7 @@ export function ShortForm() {
 
       {/* Video Lightbox Modal */}
       <VideoLightbox
-        src={lightboxVideo || ''}
+        src={lightboxVideo || ""}
         isOpen={!!lightboxVideo}
         onClose={() => setLightboxVideo(null)}
       />

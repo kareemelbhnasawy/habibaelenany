@@ -1,44 +1,20 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { useMedia } from "../hooks/useContent";
+import useEmblaCarousel from "embla-carousel-react";
 
 export function HeroCarousel() {
-  const [heroImages, setHeroImages] = useState<string[]>([]);
+  const { items } = useMedia({ isHero: true });
+  const heroImages = items.map((item) => item.url);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     duration: 30,
-    axis: 'x',
-    watchDrag: false, // Disable dragging to prevent interference with page scrolling
+    axis: "x",
+    watchDrag: false,
   });
 
-  // Load hero images on component mount
-  useEffect(() => {
-    const loadHeroImages = async () => {
-      try {
-        // Dynamically import all images from src/assets/photos/hero directory
-        const imageModules = import.meta.glob('../assets/photos/hero/*.{png,jpg,jpeg,webp,JPG,PNG,JPEG,WEBP}');
-        
-        if (Object.keys(imageModules).length > 0) {
-          // Load all the image modules and extract their URLs
-          const imagePromises = Object.entries(imageModules).map(async ([, importFn]) => {
-            const module = await importFn() as { default: string };
-            return module.default;
-          });
-          
-          const imageUrls = await Promise.all(imagePromises);
-          setHeroImages(imageUrls);
-        } else {
-          console.warn('No hero images found in src/assets/photos/hero directory');
-          setHeroImages([]);
-        }
-      } catch (error) {
-        console.error('Failed to load hero images:', error);
-        setHeroImages([]);
-      }
-    };
-
-    loadHeroImages();
-  }, []);
+  // (Removed local file loading effect)
 
   // Auto-play
   useEffect(() => {
@@ -68,15 +44,15 @@ export function HeroCarousel() {
       clearInterval(autoplayInterval);
     };
 
-    container.addEventListener('mouseenter', stopAutoplay);
-    container.addEventListener('mouseleave', startAutoplay);
+    container.addEventListener("mouseenter", stopAutoplay);
+    container.addEventListener("mouseleave", startAutoplay);
 
     startAutoplay();
 
     return () => {
       stopAutoplay();
-      container.removeEventListener('mouseenter', stopAutoplay);
-      container.removeEventListener('mouseleave', startAutoplay);
+      container.removeEventListener("mouseenter", stopAutoplay);
+      container.removeEventListener("mouseleave", startAutoplay);
     };
   }, [emblaApi]);
 
@@ -95,13 +71,16 @@ export function HeroCarousel() {
       <div className="overflow-hidden h-full" ref={emblaRef}>
         <div className="flex h-full">
           {heroImages.map((src, index) => (
-            <div key={index} className="flex-[0_0_100%] min-w-0 relative h-full">
+            <div
+              key={index}
+              className="flex-[0_0_100%] min-w-0 relative h-full"
+            >
               <motion.div
                 initial={{ scale: 1 }}
                 animate={{ scale: 1.06 }}
                 transition={{
                   duration: 7,
-                  ease: 'linear',
+                  ease: "linear",
                 }}
                 className="w-full h-full"
               >
@@ -109,11 +88,11 @@ export function HeroCarousel() {
                   src={src}
                   alt={`Hero image ${index + 1}`}
                   className="w-full h-full object-cover"
-                  loading={index === 0 ? 'eager' : 'lazy'}
+                  loading={index === 0 ? "eager" : "lazy"}
                   onError={(e) => {
                     console.warn(`Failed to load image: ${src}`);
                     // Hide broken images
-                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.style.display = "none";
                   }}
                 />
               </motion.div>

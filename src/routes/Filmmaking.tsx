@@ -1,9 +1,36 @@
-import { motion } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
-import { useLightbox } from '../components/LightboxProvider';
-import { filmmakingItems, filmmakingSections } from '../data/filmmaking';
+import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { useLightbox } from "../components/LightboxProvider";
+import { useGroupedMedia } from "../hooks/useContent";
 
-function SectionContainer({ section, sectionIndex }: { section: typeof filmmakingSections[0]; sectionIndex: number }) {
+interface MediaItem {
+  id: string;
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  category: string;
+  title?: string;
+  description?: string;
+  caption?: string;
+  [key: string]: any;
+}
+
+interface Section {
+  title: string;
+  description: string;
+  items: MediaItem[];
+}
+
+function SectionContainer({
+  section,
+  sectionIndex,
+  allItems,
+}: {
+  section: Section;
+  sectionIndex: number;
+  allItems: MediaItem[];
+}) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
   const { openLightbox } = useLightbox();
@@ -47,8 +74,14 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
   }, [isInView, section.items.length]);
 
   const handleClick = () => {
-    const globalIndex = filmmakingItems.findIndex(i => i.id === section.items[currentImageIndex].id);
-    openLightbox(filmmakingItems, globalIndex, true);
+    const globalIndex = allItems.findIndex(
+      (i) => i.id === section.items[currentImageIndex].id
+    );
+    if (globalIndex !== -1) {
+      // Cast allItems to any for the strict Photo type check, or ensure MediaItem is fully compatible
+      // We know MediaItem has all Photo props now
+      openLightbox(allItems as any, globalIndex, true);
+    }
   };
 
   return (
@@ -63,13 +96,13 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        {section.items.map((item, idx) => (
+        {section.items.map((item: MediaItem, idx: number) => (
           <motion.img
             key={item.id}
             src={item.src}
             alt={item.alt}
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            style={{ objectFit: "cover", objectPosition: "center" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: idx === currentImageIndex ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -105,11 +138,11 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
             animate={{ opacity: 1 }}
             className="absolute top-4 right-4 flex gap-1"
           >
-            {section.items.map((_, idx) => (
+            {section.items.map((_: MediaItem, idx: number) => (
               <div
                 key={idx}
                 className={`h-1 rounded-full transition-all duration-300 ${
-                  idx === currentImageIndex ? 'w-8 bg-white' : 'w-4 bg-white/50'
+                  idx === currentImageIndex ? "w-8 bg-white" : "w-4 bg-white/50"
                 }`}
               />
             ))}
@@ -121,6 +154,56 @@ function SectionContainer({ section, sectionIndex }: { section: typeof filmmakin
 }
 
 export function Filmmaking() {
+  const { sections: groupedItems, loading } = useGroupedMedia("Filmmaking");
+
+  // Section Order & Metadata
+  const sectionMetadata: Record<string, string> = {
+    Production: "Behind the scenes and production moments",
+    Cinematography: "Cinematic frames and visual storytelling",
+    "Visual Effects": "Post-production and digital effects work",
+    Direction: "Creative direction and scene composition",
+    "Set Design": "Production design and art direction",
+    Lighting: "Lighting setups and mood creation",
+  };
+  const order = [
+    "Production",
+    "Cinematography",
+    "Visual Effects",
+    "Direction",
+    "Set Design",
+    "Lighting",
+  ];
+
+  const sections = Object.keys(groupedItems)
+    .sort((a, b) => order.indexOf(a) - order.indexOf(b))
+    .map((title) => ({
+      title,
+      description: sectionMetadata[title] || "Filmmaking collection",
+      items: groupedItems[title].map((item) => ({
+        ...item,
+        src: item.url,
+        width: item.width || 1920,
+        height: item.height || 1080,
+        category: item.category,
+        alt: item.title || item.description || "Filmmaking Frame",
+        title: item.title || undefined,
+        description: item.description || undefined,
+        caption: item.description || undefined,
+        id: item.id,
+      })),
+    }));
+
+  // Flatten for Lightbox
+  const allItems = sections.flatMap((s) => s.items);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center pt-24">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen pt-24 pb-16">
       <div className="container">
@@ -141,24 +224,27 @@ export function Filmmaking() {
 
         {/* Sections Grid - 2 columns on desktop, 1 on mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {filmmakingSections.map((section, index) => (
-            <div
-              key={section.title}
-              className="w-full aspect-video"
-            >
-              <SectionContainer section={section} sectionIndex={index} />
+          {sections.map((section, index) => (
+            <div key={section.title} className="w-full aspect-video">
+              <SectionContainer
+                section={section}
+                sectionIndex={index}
+                allItems={allItems}
+              />
             </div>
           ))}
         </div>
 
         {/* Empty State */}
-        {filmmakingItems.length === 0 && (
+        {sections.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-16"
           >
-            <p className="text-muted text-lg">No filmmaking content available yet.</p>
+            <p className="text-muted text-lg">
+              No filmmaking content available yet.
+            </p>
           </motion.div>
         )}
       </div>

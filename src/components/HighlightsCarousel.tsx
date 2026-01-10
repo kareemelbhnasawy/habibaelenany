@@ -1,60 +1,38 @@
-import { useCallback } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import WheelGesturesPlugin from 'embla-carousel-wheel-gestures';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useLightbox } from './LightboxProvider';
-import { cn } from '../utils/cn';
+import { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLightbox } from "./LightboxProvider";
+import { useMedia } from "../hooks/useContent";
+import { cn } from "../utils/cn";
 
 // Photography Highlights with their dedicated images
-const photographyHighlights = [
-  {
-    id: 'photo-highlight-1',
-    src: new URL('../assets/photos/photography-highlights/img-01.JPG', import.meta.url).href,
-    alt: 'Photography highlight 1',
-    title: 'Editorial',
-    width: 1600,
-    height: 2000,
-    category: 'Photography',
-  },
-  {
-    id: 'photo-highlight-2',
-    src: new URL('../assets/photos/photography-highlights/img-02.JPG', import.meta.url).href,
-    alt: 'Photography highlight 2',
-    title: 'Portrait',
-    width: 1600,
-    height: 2000,
-    category: 'Photography',
-  },
-  {
-    id: 'photo-highlight-3',
-    src: new URL('../assets/photos/photography-highlights/img-03.jpg', import.meta.url).href,
-    alt: 'Photography highlight 3',
-    title: 'Fashion',
-    width: 1600,
-    height: 2000,
-    category: 'Photography',
-  },
-  {
-    id: 'photo-highlight-4',
-    src: new URL('../assets/photos/photography-highlights/img-04.JPG', import.meta.url).href,
-    alt: 'Photography highlight 4',
-    title: 'Style',
-    width: 1600,
-    height: 2000,
-    category: 'Photography',
-  },
-];
-
 export function HighlightsCarousel() {
   const { openLightbox } = useLightbox();
+  // Fetch highlights for Photography specifically
+  const { items } = useMedia({
+    isHighlight: true,
+    category: "Photography",
+    limit: 15,
+  });
+
+  const photographyHighlights = items.map((item) => ({
+    id: item.id,
+    src: item.url,
+    alt: item.title || "Highlight",
+    title: item.title || undefined,
+    category: item.category,
+    width: item.width || 1600,
+    height: item.height || 2000,
+  }));
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
-      align: 'start',
+      align: "start",
       skipSnaps: true,
       dragFree: true,
-      containScroll: 'trimSnaps',
+      containScroll: "trimSnaps",
       duration: 40,
     },
     [WheelGesturesPlugin()]
@@ -83,10 +61,10 @@ export function HighlightsCarousel() {
         <button
           onClick={scrollPrev}
           className={cn(
-            'hidden md:flex shrink-0',
-            'items-center justify-center',
-            'text-ink hover:text-accent transition-all outline-none',
-            'opacity-60 hover:opacity-100'
+            "hidden md:flex shrink-0",
+            "items-center justify-center",
+            "text-ink hover:text-accent transition-all outline-none",
+            "opacity-60 hover:opacity-100"
           )}
           aria-label="Previous slides"
         >
@@ -95,26 +73,29 @@ export function HighlightsCarousel() {
 
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
-        <div className="flex gap-4 md:gap-6 px-4 sm:px-0" style={{ touchAction: 'pan-x' }}>
-          {photographyHighlights.map((photo, index) => (
-            <div
-              key={photo.id}
-              className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
-            >
+          <div
+            className="flex gap-4 md:gap-6 px-4 sm:px-0"
+            style={{ touchAction: "pan-x" }}
+          >
+            {photographyHighlights.map((photo, index) => (
               <div
-                className="group relative aspect-[3/4] overflow-hidden cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
-                onClick={() => openLightbox(photographyHighlights, index)}
+                key={photo.id}
+                className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
               >
-                {/* Image */}
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
-                  loading="lazy"
-                />
+                <div
+                  className="group relative aspect-[3/4] overflow-hidden cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
+                  onClick={() => openLightbox(photographyHighlights, index)}
+                >
+                  {/* Image */}
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
+                    loading="lazy"
+                  />
 
-                {/* Commented out text overlay - can be re-added later */}
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+                  {/* Commented out text overlay - can be re-added later */}
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                     <span className="inline-block text-white/90 px-3 py-1 text-sm md:text-base uppercase tracking-wide font-medium">
                       {photo.title}
@@ -122,22 +103,22 @@ export function HighlightsCarousel() {
                   </div>
                 </div> */}
 
-                {/* Hover effect */}
-                <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all duration-300" />
+                  {/* Hover effect */}
+                  <div className="absolute inset-0 ring-2 ring-transparent group-hover:ring-accent/50 transition-all duration-300" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         </div>
 
         {/* Next Button - Desktop */}
         <button
           onClick={scrollNext}
           className={cn(
-            'hidden md:flex shrink-0',
-            'items-center justify-center',
-            'text-ink hover:text-accent transition-all outline-none',
-            'opacity-60 hover:opacity-100'
+            "hidden md:flex shrink-0",
+            "items-center justify-center",
+            "text-ink hover:text-accent transition-all outline-none",
+            "opacity-60 hover:opacity-100"
           )}
           aria-label="Next slides"
         >
