@@ -1,105 +1,85 @@
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useMedia } from "../hooks/useContent";
-import useEmblaCarousel from "embla-carousel-react";
 
 export function HeroCarousel() {
   const { items } = useMedia({ isHero: true });
   const heroImages = items.map((item) => item.url);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    duration: 30,
-    axis: "x",
-    watchDrag: false,
-  });
-
-  // (Removed local file loading effect)
-
-  // Auto-play
+  // Auto-advance
   useEffect(() => {
-    if (!emblaApi || heroImages.length === 0) return;
+    if (heroImages.length <= 1) return;
 
-    const autoplay = setInterval(() => {
-      emblaApi.scrollNext();
-    }, 5000);
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+    }, 6000); // 6 seconds per slide
 
-    return () => clearInterval(autoplay);
-  }, [emblaApi, heroImages]);
-
-  // Pause on hover
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const container = emblaApi.containerNode();
-    let autoplayInterval: ReturnType<typeof setInterval>;
-
-    const startAutoplay = () => {
-      autoplayInterval = setInterval(() => {
-        emblaApi.scrollNext();
-      }, 5000);
-    };
-
-    const stopAutoplay = () => {
-      clearInterval(autoplayInterval);
-    };
-
-    container.addEventListener("mouseenter", stopAutoplay);
-    container.addEventListener("mouseleave", startAutoplay);
-
-    startAutoplay();
-
-    return () => {
-      stopAutoplay();
-      container.removeEventListener("mouseenter", stopAutoplay);
-      container.removeEventListener("mouseleave", startAutoplay);
-    };
-  }, [emblaApi]);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
 
   if (heroImages.length === 0) {
     return (
-      <div className="relative h-full bg-gray-200 animate-pulse">
+      <div className="relative h-full bg-gray-900 animate-pulse">
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-gray-500">Loading hero images...</span>
+          <span className="text-gray-500">Loading portfolio...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative h-full group pointer-events-none">
-      <div className="overflow-hidden h-full" ref={emblaRef}>
-        <div className="flex h-full">
-          {heroImages.map((src, index) => (
-            <div
-              key={index}
-              className="flex-[0_0_100%] min-w-0 relative h-full"
-            >
+    <div className="relative h-full w-full bg-black overflow-hidden">
+      <AnimatePresence initial={false} mode="popLayout">
+        <motion.div
+          key={currentIndex}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+        >
+          {/* Creating a "Ken Burns" effect with scale */}
+          <motion.div
+            className="w-full h-full"
+            initial={{ scale: 1.0 }}
+            animate={{ scale: 1.05 }}
+            transition={{ duration: 7, ease: "linear" }}
+          >
+            <img
+              src={heroImages[currentIndex]}
+              alt={`Hero image ${currentIndex + 1}`}
+              className="w-full h-full object-cover"
+              // Ensure critical loading for the first image
+              loading={currentIndex === 0 ? "eager" : "lazy"}
+              style={{ objectPosition: "center 40%" }} // Adjusted to focus slightly higher
+            />
+          </motion.div>
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Progress Indicators */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+        {heroImages.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className="group relative h-1 w-8 overflow-hidden rounded-full bg-white/20 transition-all hover:bg-white/40 focus:outline-none"
+            aria-label={`Go to slide ${idx + 1}`}
+          >
+            {idx === currentIndex && (
               <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: 1.06 }}
-                transition={{
-                  duration: 7,
-                  ease: "linear",
-                }}
-                className="w-full h-full"
-              >
-                <img
-                  src={src}
-                  alt={`Hero image ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  onError={(e) => {
-                    console.warn(`Failed to load image: ${src}`);
-                    // Hide broken images
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-r from-ink/20 to-transparent" />
-            </div>
-          ))}
-        </div>
+                layoutId="active-pill"
+                className="absolute inset-0 bg-white"
+                initial={{ x: "-100%" }}
+                animate={{ x: "0%" }}
+                transition={{ duration: 6, ease: "linear" }}
+              />
+            )}
+          </button>
+        ))}
       </div>
     </div>
   );
