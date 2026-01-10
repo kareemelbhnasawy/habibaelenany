@@ -8,10 +8,7 @@ import { ShortFormContent } from "../components/ShortFormContent";
 import { Section } from "../components/Section";
 import { ParallaxSection } from "../components/ParallaxSection";
 import { ScrollReveal } from "../components/ScrollReveal";
-import { siteConfig } from "../data/site";
-
-// Import refer image properly for Vite build
-const referImage = new URL('../assets/photos/refer.JPG', import.meta.url).href;
+import { siteConfig } from "../lib/siteConfig";
 
 export function Home() {
   return (
@@ -140,10 +137,10 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src={referImage}
+            src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80"
             alt="Photography background"
             className="w-full h-full object-cover"
-            style={{ objectPosition: '60% center' }}
+            style={{ objectPosition: "60% center" }}
             onError={(e) => {
               console.warn("Failed to load refer.jpg, using fallback");
               e.currentTarget.src =

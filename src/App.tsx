@@ -12,7 +12,7 @@ import { Photography } from "./routes/Photography";
 import { Filmmaking } from "./routes/Filmmaking";
 import { ShortForm } from "./routes/ShortForm";
 import { NotFound } from "./routes/NotFound";
-import { siteConfig } from "./data/site";
+import { siteConfig } from "./lib/siteConfig";
 import { PageLoader } from "./components/PageLoader";
 import { AuthProvider } from "./context/AuthContext";
 import { Login } from "./routes/Login";

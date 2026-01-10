@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { siteConfig } from "../data/site";
+import { siteConfig } from "../lib/siteConfig";
 import { cn } from "../utils/cn";
 
 export function Navbar() {
@@ -64,7 +64,7 @@ export function Navbar() {
             aria-label="Home"
           >
             <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none">
-               HABIBA EL ENANY
+              HABIBA EL ENANY
             </h1>
             <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] uppercase font-light self-center ">
               PORTOFOLIO
@@ -132,12 +132,12 @@ export function Navbar() {
               transition={{ duration: 0.25, ease: "easeInOut" }}
               className="fixed inset-0 bg-paper/30 backdrop-blur-lg z-[100]"
               style={{
-                position: 'fixed',
+                position: "fixed",
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0,
-                touchAction: 'none'
+                touchAction: "none",
               }}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -149,7 +149,7 @@ export function Navbar() {
                 transition={{
                   duration: 0.35,
                   ease: [0.4, 0, 0.2, 1],
-                  delay: 0.05
+                  delay: 0.05,
                 }}
                 className="pt-24"
               >
@@ -163,8 +163,8 @@ export function Navbar() {
                       exit={{ opacity: 0, x: -30 }}
                       transition={{
                         duration: 0.35,
-                        delay: 0.1 + (index * 0.06),
-                        ease: [0.4, 0, 0.2, 1]
+                        delay: 0.1 + index * 0.06,
+                        ease: [0.4, 0, 0.2, 1],
                       }}
                     >
                       <Link

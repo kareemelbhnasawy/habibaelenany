@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import type { Photo } from '../data/photos';
-import { cn } from '../utils/cn';
+import { motion } from "framer-motion";
+import type { Photo } from "../types/database";
+import { cn } from "../utils/cn";
 
 interface ImageCardProps {
   photo: Photo;
@@ -21,7 +21,9 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
         {/* Aspect ratio container */}
         <div
           style={{
-            paddingBottom: `${(photo.height / photo.width) * 100}%`,
+            paddingBottom: `${
+              ((photo.height || 1080) / (photo.width || 1920)) * 100
+            }%`,
           }}
         >
           <img
@@ -39,9 +41,9 @@ export function ImageCard({ photo, onClick, index }: ImageCardProps) {
       {/* Subtle shadow lift on hover */}
       <div
         className={cn(
-          'absolute inset-0 ring-2 ring-transparent',
-          'group-hover:ring-accent/20 group-hover:shadow-lifted',
-          'transition-all duration-300 pointer-events-none'
+          "absolute inset-0 ring-2 ring-transparent",
+          "group-hover:ring-accent/20 group-hover:shadow-lifted",
+          "transition-all duration-300 pointer-events-none"
         )}
       />
     </motion.div>

@@ -1,5 +1,7 @@
 // import { Instagram, Linkedin } from 'lucide-react';
-import { siteConfig } from '../data/site';
+import { Link } from "react-router-dom";
+import { Lock } from "lucide-react";
+import { siteConfig } from "../lib/siteConfig";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -84,10 +86,18 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-ink/5 text-center">
+        <div className="mt-12 pt-8 border-t border-ink/5 text-center flex items-center justify-center gap-2">
           <p className="text-sm text-muted">
             &copy; {currentYear} {siteConfig.title}. All rights reserved.
           </p>
+          <Link
+            to="/admin"
+            className="text-ink/30 hover:text-ink transition-colors duration-300 p-1"
+            aria-label="Admin Access"
+            title="Admin Dashboard"
+          >
+            <Lock className="w-3 h-3" />
+          </Link>
         </div>
       </div>
     </footer>
