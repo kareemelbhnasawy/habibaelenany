@@ -92,13 +92,13 @@ export function TestimonialsCarousel() {
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
           <div
-            className="flex gap-4 md:gap-6 px-4 sm:px-0"
+            className="flex -ml-4 md:-ml-6 px-4 sm:px-0"
             style={{ touchAction: "pan-x" }}
           >
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
+                className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0 pl-4 md:pl-6"
               >
                 <div className="card p-6 md:p-8 h-full flex flex-col">
                   {/* Avatar and Info */}

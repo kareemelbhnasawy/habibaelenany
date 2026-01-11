@@ -86,13 +86,13 @@ export function FilmmakingCarousel() {
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
           <div
-            className="flex gap-4 md:gap-6 px-4 sm:px-0"
+            className="flex -ml-4 md:-ml-6 px-4 sm:px-0"
             style={{ touchAction: "pan-x" }}
           >
             {filmmakingHighlights.map((photo, index) => (
               <div
                 key={photo.id}
-                className="flex-[0_0_90%] sm:flex-[0_0_60%] lg:flex-[0_0_40%] min-w-0"
+                className="flex-[0_0_90%] sm:flex-[0_0_60%] lg:flex-[0_0_40%] min-w-0 pl-4 md:pl-6"
               >
                 <div
                   className="group relative aspect-video overflow-hidden cursor-pointer bg-ink/5 touch-manipulation active:scale-[0.98] transition-transform"

@@ -194,10 +194,13 @@ export function ShortForm() {
   }, []);
 
   // Scroll to section based on URL hash
+  // Scroll to section based on URL hash
   useEffect(() => {
+    if (loading) return; // Wait for initial load
+
     const hash = window.location.hash.slice(1); // Remove the # symbol
-    if (hash) {
-      // Wait for the page to render
+    if (hash && items.length > 0) {
+      // Small delay to ensure render cycle is complete
       setTimeout(() => {
         const element = document.getElementById(hash);
         if (element) {
@@ -210,9 +213,9 @@ export function ShortForm() {
             behavior: "smooth",
           });
         }
-      }, 100);
+      }, 300); // 300ms to allow for layout shifts
     }
-  }, []);
+  }, [loading, items.length]);
 
   if (loading) {
     return (

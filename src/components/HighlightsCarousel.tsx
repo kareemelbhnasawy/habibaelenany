@@ -74,13 +74,13 @@ export function HighlightsCarousel() {
         {/* Carousel */}
         <div className="overflow-hidden flex-1" ref={emblaRef}>
           <div
-            className="flex gap-4 md:gap-6 px-4 sm:px-0"
+            className="flex -ml-4 md:-ml-6 px-4 sm:px-0"
             style={{ touchAction: "pan-x" }}
           >
             {photographyHighlights.map((photo, index) => (
               <div
                 key={photo.id}
-                className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
+                className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0 pl-4 md:pl-6"
               >
                 <div
                   className="group relative aspect-[3/4] overflow-hidden cursor-pointer touch-manipulation active:scale-[0.98] transition-transform"
