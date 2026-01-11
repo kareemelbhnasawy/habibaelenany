@@ -147,6 +147,39 @@ export function GeneralSettings() {
     }
   };
 
+  const handleRename = async (
+    category: string,
+    oldName: string,
+    newName: string
+  ) => {
+    try {
+      // 1. Update in DB (Media Items)
+      const { error } = await supabase
+        .from("media_items")
+        .update({ section: newName })
+        .eq("category", category)
+        .eq("section", oldName);
+
+      if (error) throw error;
+
+      // 2. Update Local State & DB (Site Settings)
+      // We take the CURRENT local order state, swap the name, and save it immediately
+      // to ensure consistency between the media items and the order list.
+      const currentOrder = sectionOrderState[category] || [];
+      const newOrder = currentOrder.map((s) => (s === oldName ? newName : s));
+
+      setSectionOrderState((prev) => ({
+        ...prev,
+        [category]: newOrder,
+      }));
+
+      await updateSectionOrder(category, newOrder);
+    } catch (err) {
+      console.error("Rename failed", err);
+      alert("Failed to rename section. Please try again.");
+    }
+  };
+
   if (loadingSettings || loadingConfig) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -294,7 +327,9 @@ export function GeneralSettings() {
             Section Ordering
           </h3>
           <p className="text-sm text-gray-500">
-            Drag to reorder sections for each page.
+            Drag to reorder sections. Click the{" "}
+            <span className="font-bold">pencil icon</span> to rename a section
+            (case-sensitive).
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -307,6 +342,9 @@ export function GeneralSettings() {
                   Photography: newOrder,
                 }))
               }
+              onRename={(oldName, newName) =>
+                handleRename("Photography", oldName, newName)
+              }
             />
             <SectionOrderEditor
               category="Filmmaking"
@@ -317,6 +355,9 @@ export function GeneralSettings() {
                   Filmmaking: newOrder,
                 }))
               }
+              onRename={(oldName, newName) =>
+                handleRename("Filmmaking", oldName, newName)
+              }
             />
             <SectionOrderEditor
               category="Short Form"
@@ -326,6 +367,9 @@ export function GeneralSettings() {
                   ...prev,
                   "Short Form": newOrder,
                 }))
+              }
+              onRename={(oldName, newName) =>
+                handleRename("Short Form", oldName, newName)
               }
             />
           </div>

@@ -288,25 +288,7 @@ export function PhotographyPageEditor() {
             );
           })}
 
-          {/* Catch-all for items without a section (orphans) */}
-          {items.some((i) => !i.section) && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2">
-                <h3 className="text-xl font-medium text-white">
-                  Uncategorized
-                </h3>
-                <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
-                  {items.filter((i) => !i.section).length}
-                </span>
-              </div>
-              <MediaGrid
-                items={items.filter((i) => !i.section)}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-                onReorder={(newItems) => handleSectionReorder(newItems, "")}
-              />
-            </div>
-          )}
+          {/* Uncategorized items hidden per user request */}
         </div>
       )}
 

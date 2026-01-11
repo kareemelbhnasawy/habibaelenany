@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { Lock, Instagram, Linkedin, Mail, Globe } from "lucide-react";
+import { Lock } from "lucide-react";
 import { siteConfig } from "../lib/siteConfig";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const { generalConfig, siteInfo, contactInfo } = useSiteSettings();
+  const { siteInfo } = useSiteSettings();
 
   return (
     <footer className="bg-paper border-t border-ink/5 pt-12 md:pt-16 pb-8">
