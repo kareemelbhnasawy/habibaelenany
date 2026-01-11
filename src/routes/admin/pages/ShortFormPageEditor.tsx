@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase, updateMediaOrder } from "../../../lib/supabase";
 import { MediaGrid } from "../../../components/admin/shared/MediaGrid";
 import { MediaUploader } from "../../../components/admin/shared/MediaUploader";
 import type { MediaItem } from "../../../types/database";
+import { getReorderedUpdates } from "../../../utils/sort";
 import { Loader2, Plus, Filter } from "lucide-react";
 import { EditMediaModal } from "../../../components/admin/shared/EditMediaModal";
 
@@ -29,6 +30,7 @@ export function ShortFormPageEditor() {
         .from("media_items")
         .select("*")
         .eq("category", "Short Form")
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -63,6 +65,31 @@ export function ShortFormPageEditor() {
   const handleEdit = (item: MediaItem) => {
     setEditingItem(item);
     setIsEditModalOpen(true);
+  };
+
+  const handleSectionReorder = (
+    newSectionItems: MediaItem[],
+    section: string
+  ) => {
+    const originalSubset = items.filter(
+      (i) => (i.section || "") === (section || "")
+    );
+    const updates = getReorderedUpdates(newSectionItems, originalSubset);
+
+    setItems((prev) => {
+      const updateMap = new Map(updates.map((u) => [u.id, u.sort_order]));
+      const nextItems = prev.map((item) => {
+        if (updateMap.has(item.id)) {
+          return { ...item, sort_order: updateMap.get(item.id) };
+        }
+        return item;
+      });
+      return nextItems.sort(
+        (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
+      );
+    });
+
+    updateMediaOrder(updates);
   };
 
   const filteredItems =
@@ -165,12 +192,66 @@ export function ShortFormPageEditor() {
         <div className="flex justify-center py-20">
           <Loader2 className="animate-spin text-gray-500" />
         </div>
-      ) : (
+      ) : activeSection !== "All" ? (
         <MediaGrid
           items={filteredItems}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          onReorder={(newItems) =>
+            handleSectionReorder(newItems, activeSection)
+          }
         />
+      ) : (
+        <div className="space-y-12">
+          {sections.length === 0 && items.length === 0 && (
+            <div className="text-center text-gray-500 py-12">
+              No videos found. Upload some to get started.
+            </div>
+          )}
+
+          {sections.map((section) => {
+            const sectionItems = items.filter((i) => i.section === section);
+            if (sectionItems.length === 0) return null;
+
+            return (
+              <div key={section} className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                  <h3 className="text-xl font-medium text-white">{section}</h3>
+                  <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                    {sectionItems.length}
+                  </span>
+                </div>
+                <MediaGrid
+                  items={sectionItems}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                  onReorder={(newItems) =>
+                    handleSectionReorder(newItems, section)
+                  }
+                />
+              </div>
+            );
+          })}
+
+          {items.some((i) => !i.section) && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                <h3 className="text-xl font-medium text-white">
+                  Uncategorized
+                </h3>
+                <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                  {items.filter((i) => !i.section).length}
+                </span>
+              </div>
+              <MediaGrid
+                items={items.filter((i) => !i.section)}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onReorder={(newItems) => handleSectionReorder(newItems, "")}
+              />
+            </div>
+          )}
+        </div>
       )}
 
       <EditMediaModal

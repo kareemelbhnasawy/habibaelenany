@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Globe,
+  MessageSquareQuote,
 } from "lucide-react";
 import { clsx } from "clsx";
 
@@ -21,6 +22,11 @@ const navItems = [
   { label: "Photography", href: "/admin/photography", icon: Image },
   { label: "Filmmaking", href: "/admin/filmmaking", icon: Video },
   { label: "Short Form", href: "/admin/short-form", icon: Smartphone },
+  {
+    label: "Testimonials",
+    href: "/admin/testimonials",
+    icon: MessageSquareQuote,
+  },
   { label: "Settings", href: "/admin/settings", icon: Settings },
   { label: "Migration", href: "/admin/migration", icon: Database },
 ];

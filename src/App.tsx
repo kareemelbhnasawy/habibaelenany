@@ -24,6 +24,7 @@ import { HomePageEditor } from "./routes/admin/pages/HomePageEditor";
 import { PhotographyPageEditor } from "./routes/admin/pages/PhotographyPageEditor";
 import { FilmmakingPageEditor } from "./routes/admin/pages/FilmmakingPageEditor";
 import { ShortFormPageEditor } from "./routes/admin/pages/ShortFormPageEditor";
+import { TestimonialsEditor } from "./routes/admin/pages/TestimonialsEditor";
 import { SettingsPage } from "./routes/admin/pages/SettingsPage";
 import { DashboardOverview } from "./routes/admin/DashboardOverview";
 
@@ -211,6 +212,7 @@ function App() {
                 <Route path="photography" element={<PhotographyPageEditor />} />
                 <Route path="filmmaking" element={<FilmmakingPageEditor />} />
                 <Route path="short-form" element={<ShortFormPageEditor />} />
+                <Route path="testimonials" element={<TestimonialsEditor />} />
                 <Route path="migration" element={<Migration />} />
                 <Route path="settings" element={<SettingsPage />} />
               </Route>

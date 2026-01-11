@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase, updateMediaOrder } from "../../../lib/supabase";
 import { MediaGrid } from "../../../components/admin/shared/MediaGrid";
 import { MediaUploader } from "../../../components/admin/shared/MediaUploader";
 import type { MediaItem } from "../../../types/database";
@@ -27,6 +27,7 @@ export function HomePageEditor() {
         .from("media_items")
         .select("*")
         .eq("is_hero", true)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
 
       if (heroData) setHeroItems(heroData);
@@ -72,6 +73,29 @@ export function HomePageEditor() {
   const handleEdit = (item: MediaItem) => {
     setEditingItem(item);
     setIsEditModalOpen(true);
+  };
+
+  const handleHeroReorder = (newItems: MediaItem[]) => {
+    setHeroItems(newItems);
+    const updates = newItems.map((item, index) => ({
+      id: item.id,
+      sort_order: index,
+    }));
+    updateMediaOrder(updates);
+  };
+
+  const handleHighlightReorder = (newItems: MediaItem[], category: string) => {
+    // Update local state by merging the reordered items with the rest
+    setHighlightItems((prev) => {
+      const others = prev.filter((i) => i.category !== category);
+      return [...others, ...newItems];
+    });
+
+    const updates = newItems.map((item, index) => ({
+      id: item.id,
+      sort_order: index,
+    }));
+    updateMediaOrder(updates);
   };
 
   return (
@@ -140,6 +164,7 @@ export function HomePageEditor() {
                   items={heroItems}
                   onDelete={(id) => handleDelete(id, true)}
                   onEdit={handleEdit}
+                  onReorder={handleHeroReorder}
                 />
               </section>
             </div>
@@ -190,6 +215,9 @@ export function HomePageEditor() {
                     )}
                     onDelete={(id) => handleDelete(id, false)}
                     onEdit={handleEdit}
+                    onReorder={(items) =>
+                      handleHighlightReorder(items, "Photography")
+                    }
                   />
                   {highlightItems.filter((i) => i.category === "Photography")
                     .length === 0 && (
@@ -217,6 +245,9 @@ export function HomePageEditor() {
                     )}
                     onDelete={(id) => handleDelete(id, false)}
                     onEdit={handleEdit}
+                    onReorder={(items) =>
+                      handleHighlightReorder(items, "Filmmaking")
+                    }
                   />
                   {highlightItems.filter((i) => i.category === "Filmmaking")
                     .length === 0 && (
@@ -244,6 +275,9 @@ export function HomePageEditor() {
                     )}
                     onDelete={(id) => handleDelete(id, false)}
                     onEdit={handleEdit}
+                    onReorder={(items) =>
+                      handleHighlightReorder(items, "Short Form")
+                    }
                   />
                   {highlightItems.filter((i) => i.category === "Short Form")
                     .length === 0 && (

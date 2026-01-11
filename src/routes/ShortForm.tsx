@@ -244,26 +244,20 @@ export function ShortForm() {
         {/* Content Grid - Dynamic layout based on section video count */}
         <div className="max-w-7xl mx-auto space-y-24 md:space-y-32">
           {(() => {
-            // Group items by title (section)
+            // Group items by title (section) respecting the sort_order from DB
             const sections: { [key: string]: any[] } = {};
-            // Sort by creation date or a specific order field if available (omitted for now)
-            // Prioritize by title order as before?
-            // Mernyth, Flyzone, Body Bar
-            const preferredOrder = ["Mernyth", "Flyzone", "Body Bar"];
+            const sectionKeys: string[] = []; // Keep track of order
 
             items.forEach((item) => {
               const title = item.title || "Untitled";
               if (!sections[title]) {
                 sections[title] = [];
+                sectionKeys.push(title); // Add to order list on first encounter
               }
               sections[title].push(item);
             });
 
-            const sortedKeys = Object.keys(sections).sort((a, b) => {
-              return preferredOrder.indexOf(a) - preferredOrder.indexOf(b);
-            });
-
-            return sortedKeys.map((title, sectionIndex) => {
+            return sectionKeys.map((title, sectionIndex) => {
               const sectionItems = sections[title];
               const mainItem = sectionItems[0];
               const smallItems = sectionItems.slice(1);

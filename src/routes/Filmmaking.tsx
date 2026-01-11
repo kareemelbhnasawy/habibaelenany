@@ -1,17 +1,14 @@
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useLightbox } from "../components/LightboxProvider";
-import { useGroupedMedia } from "../hooks/useContent";
+import { useMedia } from "../hooks/useContent";
+import type { MediaItem as DBMediaItem } from "../types/database"; // Rename for clarity
 
-interface MediaItem {
-  id: string;
+interface LocalMediaItem extends DBMediaItem {
   src: string;
+  alt: string;
   width: number;
   height: number;
-  alt: string;
-  category: string;
-  title?: string;
-  description?: string;
   caption?: string;
   [key: string]: any;
 }
@@ -19,7 +16,7 @@ interface MediaItem {
 interface Section {
   title: string;
   description: string;
-  items: MediaItem[];
+  items: LocalMediaItem[];
 }
 
 function SectionContainer({
@@ -29,12 +26,14 @@ function SectionContainer({
 }: {
   section: Section;
   sectionIndex: number;
-  allItems: MediaItem[];
+  allItems: LocalMediaItem[];
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
   const { openLightbox } = useLightbox();
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // ... rest of SectionContainer (unchanged until handleClick)
 
   // Intersection Observer to detect when section is in viewport
   useEffect(() => {
@@ -78,8 +77,7 @@ function SectionContainer({
       (i) => i.id === section.items[currentImageIndex].id
     );
     if (globalIndex !== -1) {
-      // Cast allItems to any for the strict Photo type check, or ensure MediaItem is fully compatible
-      // We know MediaItem has all Photo props now
+      // Lightbox expects Photo type which is compatible with our extended type
       openLightbox(allItems as any, globalIndex, true);
     }
   };
@@ -96,7 +94,7 @@ function SectionContainer({
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        {section.items.map((item: MediaItem, idx: number) => (
+        {section.items.map((item: LocalMediaItem, idx: number) => (
           <motion.img
             key={item.id}
             src={item.src}
@@ -114,23 +112,6 @@ function SectionContainer({
 
       {/* Content */}
       <div className="relative h-full flex flex-col justify-end p-6 md:p-8 lg:p-10">
-        {/* Commented out text overlay - can be re-added later */}
-        {/* <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold text-white mb-3">
-            {section.title}
-          </h2>
-          <p className="text-base md:text-lg text-white/90 mb-2">
-            {section.description}
-          </p>
-          <p className="text-sm text-white/70">
-            {section.items.length} {section.items.length === 1 ? 'photo' : 'photos'}
-          </p>
-        </motion.div> */}
-
         {/* Progress indicator when section is in view */}
         {isInView && section.items.length > 1 && (
           <motion.div
@@ -138,7 +119,7 @@ function SectionContainer({
             animate={{ opacity: 1 }}
             className="absolute top-4 right-4 flex gap-1"
           >
-            {section.items.map((_: MediaItem, idx: number) => (
+            {section.items.map((_: LocalMediaItem, idx: number) => (
               <div
                 key={idx}
                 className={`h-1 rounded-full transition-all duration-300 ${
@@ -154,44 +135,48 @@ function SectionContainer({
 }
 
 export function Filmmaking() {
-  const { sections: groupedItems, loading } = useGroupedMedia("Filmmaking");
+  const { items: allItemsData, loading } = useMedia({ category: "Filmmaking" });
 
-  // Section Order & Metadata
-  const sectionMetadata: Record<string, string> = {
-    Production: "Behind the scenes and production moments",
-    Cinematography: "Cinematic frames and visual storytelling",
-    "Visual Effects": "Post-production and digital effects work",
-    Direction: "Creative direction and scene composition",
-    "Set Design": "Production design and art direction",
-    Lighting: "Lighting setups and mood creation",
-  };
-  const order = [
-    "Production",
-    "Cinematography",
-    "Visual Effects",
-    "Direction",
-    "Set Design",
-    "Lighting",
-  ];
+  const sections = useMemo(() => {
+    // Metadata only - Order comes from DB
+    const sectionMetadata: Record<string, string> = {
+      Production: "Behind the scenes and production moments",
+      Cinematography: "Cinematic frames and visual storytelling",
+      "Visual Effects": "Post-production and digital effects work",
+      Direction: "Creative direction and scene composition",
+      "Set Design": "Production design and art direction",
+      Lighting: "Lighting setups and mood creation",
+    };
 
-  const sections = Object.keys(groupedItems)
-    .sort((a, b) => order.indexOf(a) - order.indexOf(b))
-    .map((title) => ({
+    const map = new Map<string, DBMediaItem[]>();
+
+    allItemsData.forEach((item) => {
+      const title = item.section || "Uncategorized";
+      if (!map.has(title)) {
+        map.set(title, []);
+      }
+      map.get(title)!.push(item);
+    });
+
+    return Array.from(map.entries()).map(([title, items]) => ({
       title,
       description: sectionMetadata[title] || "Filmmaking collection",
-      items: groupedItems[title].map((item) => ({
-        ...item,
-        src: item.url,
-        width: item.width || 1920,
-        height: item.height || 1080,
-        category: item.category,
-        alt: item.title || item.description || "Filmmaking Frame",
-        title: item.title || undefined,
-        description: item.description || undefined,
-        caption: item.description || undefined,
-        id: item.id,
-      })),
+      items: items.map(
+        (item): LocalMediaItem => ({
+          ...item,
+          src: item.url,
+          width: item.width || 1920,
+          height: item.height || 1080,
+          category: item.category,
+          alt: item.title || item.description || "Filmmaking Frame",
+          title: item.title || null,
+          description: item.description || null,
+          caption: item.description || undefined,
+          id: item.id,
+        })
+      ),
     }));
+  }, [allItemsData]);
 
   // Flatten for Lightbox
   const allItems = sections.flatMap((s) => s.items);

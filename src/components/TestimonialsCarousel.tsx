@@ -1,11 +1,22 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-const testimonials: any[] = []; // Temporary fix as testimonials.ts was deleted
 import { cn } from "../utils/cn";
+import { supabase } from "../lib/supabase";
+
+interface Testimonial {
+  id: string;
+  name: string;
+  role: string | null;
+  quote: string;
+  avatar_url: string | null;
+}
 
 export function TestimonialsCarousel() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -18,6 +29,30 @@ export function TestimonialsCarousel() {
     [WheelGesturesPlugin()]
   );
 
+  useEffect(() => {
+    async function fetchTestimonials() {
+      try {
+        const { data, error } = await supabase
+          .from("testimonials")
+          .select("*")
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching testimonials", error);
+        } else {
+          setTestimonials(data || []);
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching testimonials", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTestimonials();
+  }, []);
+
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
   }, [emblaApi]);
@@ -25,6 +60,9 @@ export function TestimonialsCarousel() {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  if (loading) return null; // Or a skeleton loader
+  if (testimonials.length === 0) return null; // Hide section if no testimonials
 
   return (
     <div>
@@ -57,34 +95,40 @@ export function TestimonialsCarousel() {
             className="flex gap-4 md:gap-6 px-4 sm:px-0"
             style={{ touchAction: "pan-x" }}
           >
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <div
-                key={`${testimonial.id}-${index}`}
+                key={testimonial.id}
                 className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] min-w-0"
               >
                 <div className="card p-6 md:p-8 h-full flex flex-col">
                   {/* Avatar and Info */}
                   <div className="flex items-center gap-4 mb-6">
-                    {testimonial.avatar && (
+                    {testimonial.avatar_url ? (
                       <img
-                        src={testimonial.avatar}
+                        src={testimonial.avatar_url}
                         alt={testimonial.name}
-                        className="w-12 h-12 md:w-14 md:h-14 object-cover"
+                        className="w-12 h-12 md:w-14 md:h-14 object-cover rounded-full"
                         loading="lazy"
                       />
+                    ) : (
+                      <div className="w-12 h-12 md:w-14 md:h-14 bg-zinc-800 rounded-full flex items-center justify-center text-zinc-500 font-bold">
+                        {testimonial.name[0]}
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-base md:text-lg truncate">
                         {testimonial.name}
                       </h4>
-                      <p className="text-sm text-muted truncate">
-                        {testimonial.role}
-                      </p>
+                      {testimonial.role && (
+                        <p className="text-sm text-muted truncate">
+                          {testimonial.role}
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   {/* Quote */}
-                  <blockquote className="text-muted leading-relaxed text-sm md:text-base flex-1">
+                  <blockquote className="text-muted leading-relaxed text-sm md:text-base flex-1 italic">
                     "{testimonial.quote}"
                   </blockquote>
                 </div>

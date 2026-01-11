@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase, updateMediaOrder } from "../../../lib/supabase";
 import { MediaGrid } from "../../../components/admin/shared/MediaGrid";
 import { MediaUploader } from "../../../components/admin/shared/MediaUploader";
 import type { MediaItem } from "../../../types/database";
+import { getReorderedUpdates } from "../../../utils/sort";
 import { Loader2, Plus, Filter } from "lucide-react";
 import { EditMediaModal } from "../../../components/admin/shared/EditMediaModal";
 
@@ -31,6 +32,7 @@ export function PhotographyPageEditor() {
         .from("media_items")
         .select("*")
         .eq("category", "Photography")
+        .order("sort_order", { ascending: true }) // Added sort_order
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -68,6 +70,47 @@ export function PhotographyPageEditor() {
   const handleEdit = (item: MediaItem) => {
     setEditingItem(item);
     setIsEditModalOpen(true);
+  };
+
+  const handleSectionReorder = (
+    newSectionItems: MediaItem[],
+    section: string
+  ) => {
+    // 1. Get the original subset for this section to preserve valid sort_order values
+    const originalSubset = items.filter(
+      (i) => (i.section || "") === (section || "")
+    );
+
+    // 2. Calculate stable updates
+    const updates = getReorderedUpdates(newSectionItems, originalSubset);
+
+    // 3. Optimistic update of local state
+    setItems((prev) => {
+      // Create a map of updates for O(1) lookup
+      const updateMap = new Map(updates.map((u) => [u.id, u.sort_order]));
+
+      // Return new array where items in this section are reordered,
+      // but GLOBAL order of other items remains untouched.
+      // Actually, we just need to update the sort_orders of the affected items in the main list
+      // and let the render logic sort them if needed.
+      // BUT `items` state is currently sorted by `sort_order`.
+      // So straightforward approach: Map over prev, update sort_order if changed, then resort.
+
+      const nextItems = prev.map((item) => {
+        if (updateMap.has(item.id)) {
+          return { ...item, sort_order: updateMap.get(item.id) };
+        }
+        return item;
+      });
+
+      // Maintain the sort order for the state so typical "All" view (if we used it flat) works too
+      return nextItems.sort(
+        (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
+      );
+    });
+
+    // 4. Persist
+    updateMediaOrder(updates);
   };
 
   const filteredItems =
@@ -171,17 +214,75 @@ export function PhotographyPageEditor() {
         />
       </div>
 
-      {/* Grid */}
+      {/* Grid Area */}
       {loading ? (
         <div className="flex justify-center py-20">
           <Loader2 className="animate-spin text-gray-500" />
         </div>
-      ) : (
+      ) : activeSection !== "All" ? (
+        // Single Section View (Filtered)
         <MediaGrid
           items={filteredItems}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          onReorder={(newItems) =>
+            handleSectionReorder(newItems, activeSection)
+          }
         />
+      ) : (
+        // Grouped View (All Sections)
+        <div className="space-y-12">
+          {sections.length === 0 && items.length === 0 && (
+            <div className="text-center text-gray-500 py-12">
+              No photos found. Upload some to get started.
+            </div>
+          )}
+
+          {/* Render each section */}
+          {sections.map((section) => {
+            const sectionItems = items.filter((i) => i.section === section);
+            if (sectionItems.length === 0) return null;
+
+            return (
+              <div key={section} className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                  <h3 className="text-xl font-medium text-white">{section}</h3>
+                  <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                    {sectionItems.length}
+                  </span>
+                </div>
+                <MediaGrid
+                  items={sectionItems}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                  onReorder={(newItems) =>
+                    handleSectionReorder(newItems, section)
+                  }
+                />
+              </div>
+            );
+          })}
+
+          {/* Catch-all for items without a section (orphans) */}
+          {items.some((i) => !i.section) && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                <h3 className="text-xl font-medium text-white">
+                  Uncategorized
+                </h3>
+                <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                  {items.filter((i) => !i.section).length}
+                </span>
+              </div>
+              <MediaGrid
+                items={items.filter((i) => !i.section)}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onReorder={(newItems) => handleSectionReorder(newItems, "")}
+              />
+            </div>
+          )}
+        </div>
       )}
 
       <EditMediaModal

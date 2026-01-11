@@ -1,18 +1,19 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ImageCard } from "../components/ImageCard";
 import { useLightbox } from "../components/LightboxProvider";
-import { useGroupedMedia } from "../hooks/useContent";
+import { useMedia } from "../hooks/useContent";
 import { cn } from "../utils/cn";
+import type { MediaItem } from "../types/database";
 
 export function Photography() {
   const [activeSection, setActiveSection] = useState<string>("Editorial");
   const { openLightbox } = useLightbox();
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
-  const { sections: groupedItems, loading } = useGroupedMedia("Photography");
+  const { items: allItems, loading } = useMedia({ category: "Photography" });
 
-  // Define section order and metadata
+  // Define section metadata (descriptions) only - Order is derived from data
   const sectionMetadata: Record<string, string> = {
     Fashion: "Fashion photography and styling",
     Editorial: "Fashion and editorial photography",
@@ -21,12 +22,22 @@ export function Photography() {
     Products: "Commercial product photography",
   };
 
-  // Convert grouped items to array, respecting a preferred order if possible, or just default keys
-  const sections = Object.keys(groupedItems)
-    .map((title) => ({
+  const sections = useMemo(() => {
+    const map = new Map<string, MediaItem[]>();
+
+    // Group items while preserving order based on first occurrence
+    allItems.forEach((item) => {
+      const title = item.section || "Uncategorized";
+      if (!map.has(title)) {
+        map.set(title, []);
+      }
+      map.get(title)!.push(item);
+    });
+
+    return Array.from(map.entries()).map(([title, items]) => ({
       title,
       description: sectionMetadata[title] || "Portfolio collection",
-      items: groupedItems[title].map((item) => ({
+      items: items.map((item) => ({
         ...item,
         src: item.url,
         alt: item.title || item.description || "Portfolio Item",
@@ -35,18 +46,13 @@ export function Photography() {
         year: item.year || undefined,
         id: item.id,
       })),
-    }))
-    .sort((a, b) => {
-      // Optional: Sort by predefined order
-      const order = [
-        "Fashion",
-        "Editorial",
-        "Outdoor",
-        "Portraits",
-        "Products",
-      ];
-      return order.indexOf(a.title) - order.indexOf(b.title);
-    });
+    }));
+  }, [allItems]);
+
+  // Set initial active section if not set and sections exist
+  if (!activeSection && sections.length > 0) {
+    setActiveSection(sections[0].title);
+  }
 
   const scrollToSection = (sectionTitle: string) => {
     setActiveSection(sectionTitle);
