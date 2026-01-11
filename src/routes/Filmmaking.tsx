@@ -97,20 +97,31 @@ function SectionContainer({
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        {section.items.map((item: LocalMediaItem, idx: number) => (
-          <motion.img
-            key={item.id}
-            src={item.src}
-            alt={item.alt}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectFit: "cover", objectPosition: "center" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: idx === currentImageIndex ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-          />
-        ))}
+        {section.items.map((item: LocalMediaItem, idx: number) => {
+          const isActive = idx === currentImageIndex;
+          return (
+            <img
+              key={item.id}
+              src={item.src}
+              alt={item.alt}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+                opacity: isActive ? 1 : 0,
+                zIndex: isActive ? 10 : 1, // Keep inactive items below
+                transition: isActive
+                  ? `opacity ${speedMs}ms ease-in-out`
+                  : `opacity 0ms linear ${speedMs}ms`, // Delay opacity drop until next one is ready
+              }}
+            />
+          );
+        })}
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/20 group-hover:from-ink/70 group-hover:via-ink/30 group-hover:to-ink/10 transition-all duration-300" />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/20 group-hover:from-ink/70 group-hover:via-ink/30 group-hover:to-ink/10 transition-all duration-300 pointer-events-none"
+          style={{ zIndex: 20 }}
+        />
       </div>
 
       {/* Content */}
