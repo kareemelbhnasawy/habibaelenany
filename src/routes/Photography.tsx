@@ -29,7 +29,9 @@ export function Photography() {
 
     // Group items while preserving order based on first occurrence
     allItems.forEach((item) => {
-      const title = item.section || "Uncategorized";
+      // Hide uncategorized items in public view
+      if (!item.section) return;
+      const title = item.section;
       if (!map.has(title)) {
         map.set(title, []);
       }

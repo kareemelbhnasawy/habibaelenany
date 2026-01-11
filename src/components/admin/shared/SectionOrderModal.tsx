@@ -1,7 +1,8 @@
 import { X } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { SectionOrderEditor } from "./SectionOrderEditor";
 import { useSiteSettings } from "../../../hooks/useSiteSettings";
+import { supabase } from "../../../lib/supabase";
 
 interface SectionOrderModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export function SectionOrderModal({
 }: SectionOrderModalProps) {
   const { sectionOrder, updateSectionOrder } = useSiteSettings();
   const storedOrder = sectionOrder[category] || [];
+  const [renamedMap, setRenamedMap] = useState<Record<string, string>>({});
 
   const allSections = useMemo(() => {
     // 1. Start with the stored order to preserve user's previous sorts
@@ -25,14 +27,17 @@ export function SectionOrderModal({
     const storedSet = new Set(storedOrder);
 
     // 2. Append any existing sections that haven't been ordered yet
-    existingSections.forEach((section) => {
+    existingSections.forEach((originalSection) => {
+      // Apply any local renames to the stale existingSections prop
+      const section = renamedMap[originalSection] || originalSection;
+
       if (!storedSet.has(section)) {
         combined.push(section);
       }
     });
 
     return combined;
-  }, [storedOrder, existingSections]);
+  }, [storedOrder, existingSections, renamedMap]);
 
   if (!isOpen) return null;
 
@@ -57,8 +62,33 @@ export function SectionOrderModal({
           category={category}
           sections={allSections}
           onChange={async (newOrder) => {
-            // Optimistic update handled by hook, but we need to pass it back
             await updateSectionOrder(category, newOrder);
+          }}
+          onRename={async (oldName, newName) => {
+            try {
+              // 1. Update in DB
+              const { error } = await supabase
+                .from("media_items")
+                .update({ section: newName })
+                .eq("category", category)
+                .eq("section", oldName);
+
+              if (error) throw error;
+
+              // 2. Update Order Preference
+              // We need to replace the old name with the new name in the stored order
+              const newOrder = storedOrder.map((s) =>
+                s === oldName ? newName : s
+              );
+
+              await updateSectionOrder(category, newOrder);
+
+              // Track rename locally to fix stale existingSections
+              setRenamedMap((prev) => ({ ...prev, [oldName]: newName }));
+            } catch (err) {
+              console.error("Rename failed", err);
+              alert("Failed to rename section.");
+            }
           }}
         />
 

@@ -1,19 +1,51 @@
 import { useState } from "react";
-import { ArrowUp, ArrowDown, X, GripVertical, Plus } from "lucide-react";
+import {
+  ArrowUp,
+  ArrowDown,
+  X,
+  GripVertical,
+  Plus,
+  Pencil,
+  Check,
+} from "lucide-react";
 import { Reorder } from "framer-motion";
 
 interface SectionOrderEditorProps {
   category: string;
   sections: string[];
   onChange: (newOrder: string[]) => void;
+  onRename?: (oldName: string, newName: string) => Promise<void> | void;
 }
 
 export function SectionOrderEditor({
   category,
   sections,
   onChange,
+  onRename,
 }: SectionOrderEditorProps) {
   const [newSection, setNewSection] = useState("");
+  const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+
+  const startEdit = (section: string) => {
+    setEditingSection(section);
+    setEditValue(section);
+  };
+
+  const saveEdit = async () => {
+    if (!editingSection || !editValue.trim() || !onRename) return;
+    if (editValue.trim() === editingSection) {
+      setEditingSection(null);
+      return;
+    }
+    // Check duplicate
+    if (sections.includes(editValue.trim())) {
+      alert("Section with this name already exists.");
+      return;
+    }
+    await onRename(editingSection, editValue.trim());
+    setEditingSection(null);
+  };
 
   const move = (index: number, direction: -1 | 1) => {
     const newOrder = [...sections];
@@ -70,9 +102,34 @@ export function SectionOrderEditor({
               }}
             >
               <GripVertical className="text-gray-600 w-4 h-4 cursor-grab" />
-              <span className="flex-1 text-sm text-white select-none">
-                {section}
-              </span>
+              {editingSection === section ? (
+                <div className="flex-1 flex gap-2">
+                  <input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    className="flex-1 bg-black/50 border border-white/20 rounded px-2 py-0.5 text-sm text-white"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") saveEdit();
+                      if (e.key === "Escape") setEditingSection(null);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      saveEdit();
+                    }}
+                    className="p-1 hover:bg-green-500/20 text-green-400 rounded"
+                  >
+                    <Check size={14} />
+                  </button>
+                </div>
+              ) : (
+                <span className="flex-1 text-sm text-white select-none">
+                  {section}
+                </span>
+              )}
 
               <div className="flex items-center gap-1">
                 <button
@@ -95,6 +152,17 @@ export function SectionOrderEditor({
                 >
                   <X size={14} />
                 </button>
+                {onRename && editingSection !== section && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startEdit(section);
+                    }}
+                    className="p-1 hover:bg-blue-500/20 rounded text-blue-400 hover:text-blue-300 ml-1"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                )}
               </div>
             </Reorder.Item>
           ))}

@@ -11,7 +11,7 @@ export function Footer() {
     <footer className="bg-paper border-t border-ink/5 pt-12 md:pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Dynamic Footer Image Section */}
-        {generalConfig.footer_image_url && (
+        {/* {generalConfig.footer_image_url && (
           <div className="w-full max-w-lg mx-auto mb-12">
             <img
               src={generalConfig.footer_image_url}
@@ -19,7 +19,7 @@ export function Footer() {
               className="w-full h-auto object-contain rounded-lg shadow-sm"
             />
           </div>
-        )}
+        )} */}
 
         <div className="text-center space-y-6">
           {/* Brand */}
@@ -35,7 +35,7 @@ export function Footer() {
           </div>
 
           {/* Social Links */}
-          <div className="flex items-center justify-center gap-6">
+          {/* <div className="flex items-center justify-center gap-6">
             {contactInfo.instagram && (
               <a
                 href={contactInfo.instagram}
@@ -78,7 +78,7 @@ export function Footer() {
                 <Mail size={20} />
               </a>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Copyright */}

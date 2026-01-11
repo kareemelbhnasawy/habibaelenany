@@ -289,6 +289,7 @@ export function FilmmakingPageEditor() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onUpdate={fetchData}
+        existingSections={sections}
       />
 
       <SectionOrderModal

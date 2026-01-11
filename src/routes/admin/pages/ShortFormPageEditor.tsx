@@ -284,6 +284,7 @@ export function ShortFormPageEditor() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onUpdate={fetchData}
+        existingSections={sections}
       />
 
       <SectionOrderModal

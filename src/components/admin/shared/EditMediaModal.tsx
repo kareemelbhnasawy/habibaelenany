@@ -8,6 +8,7 @@ interface EditMediaModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: () => void;
+  existingSections?: string[];
 }
 
 export function EditMediaModal({
@@ -15,6 +16,7 @@ export function EditMediaModal({
   isOpen,
   onClose,
   onUpdate,
+  existingSections,
 }: EditMediaModalProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -133,13 +135,62 @@ export function EditMediaModal({
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   Section
                 </label>
-                <input
-                  value={formData.section}
-                  onChange={(e) =>
-                    setFormData({ ...formData, section: e.target.value })
-                  }
-                  className="w-full px-3 py-2 bg-black border border-white/10 rounded-lg text-white text-sm focus:border-white/30 outline-none"
-                />
+                {existingSections && existingSections.length > 0 ? (
+                  <div className="space-y-2">
+                    <select
+                      value={
+                        existingSections.includes(formData.section) ||
+                        formData.section === ""
+                          ? formData.section
+                          : "__CUSTOM__"
+                      }
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === "__CUSTOM__") {
+                          if (existingSections.includes(formData.section)) {
+                            setFormData({ ...formData, section: "" });
+                          }
+                        } else {
+                          setFormData({ ...formData, section: val });
+                        }
+                      }}
+                      className="w-full px-3 py-2 bg-black border border-white/10 rounded-lg text-white text-sm focus:border-white/30 outline-none appearance-none cursor-pointer"
+                    >
+                      <option value="">Uncategorized</option>
+                      <optgroup label="Select Existing">
+                        {existingSections.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <option value="__CUSTOM__">+ Create New / Custom</option>
+                    </select>
+
+                    {!(
+                      existingSections.includes(formData.section) ||
+                      formData.section === ""
+                    ) && (
+                      <input
+                        value={formData.section}
+                        onChange={(e) =>
+                          setFormData({ ...formData, section: e.target.value })
+                        }
+                        className="w-full px-3 py-2 bg-black border border-white/10 rounded-lg text-white text-sm focus:border-white/30 outline-none"
+                        placeholder="Enter new section name..."
+                        autoFocus
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    value={formData.section}
+                    onChange={(e) =>
+                      setFormData({ ...formData, section: e.target.value })
+                    }
+                    className="w-full px-3 py-2 bg-black border border-white/10 rounded-lg text-white text-sm focus:border-white/30 outline-none"
+                  />
+                )}
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-400 mb-1">
