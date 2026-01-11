@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ImageCard } from "../components/ImageCard";
 import { useLightbox } from "../components/LightboxProvider";
 import { useMedia } from "../hooks/useContent";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 import { cn } from "../utils/cn";
 import type { MediaItem } from "../types/database";
 
@@ -12,6 +13,7 @@ export function Photography() {
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const { items: allItems, loading } = useMedia({ category: "Photography" });
+  const { sectionOrder } = useSiteSettings();
 
   // Define section metadata (descriptions) only - Order is derived from data
   const sectionMetadata: Record<string, string> = {
@@ -34,7 +36,7 @@ export function Photography() {
       map.get(title)!.push(item);
     });
 
-    return Array.from(map.entries()).map(([title, items]) => ({
+    const grouped = Array.from(map.entries()).map(([title, items]) => ({
       title,
       description: sectionMetadata[title] || "Portfolio collection",
       items: items.map((item) => ({
@@ -47,7 +49,26 @@ export function Photography() {
         id: item.id,
       })),
     }));
-  }, [allItems]);
+
+    // Sort by custom order
+    const order = sectionOrder?.Photography || [];
+    if (order.length > 0) {
+      grouped.sort((a, b) => {
+        const indexA = order.indexOf(a.title);
+        const indexB = order.indexOf(b.title);
+        // If both found, sort by index
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        // If only A found, A comes first
+        if (indexA !== -1) return -1;
+        // If only B found, B comes first
+        if (indexB !== -1) return 1;
+        // If neither found, keep original order (or alphabetical?)
+        return 0; // Keep implicit order
+      });
+    }
+
+    return grouped;
+  }, [allItems, sectionOrder]);
 
   // Set initial active section if not set and sections exist
   if (!activeSection && sections.length > 0) {

@@ -26,7 +26,7 @@ export function HomePageEditor() {
       const { data: heroData } = await supabase
         .from("media_items")
         .select("*")
-        .eq("is_hero", true)
+        .eq("category", "Hero") // Updated to use category
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
 
@@ -150,8 +150,8 @@ export function HomePageEditor() {
                   Add Hero Image
                 </h3>
                 <MediaUploader
-                  category="Photography" // Hero images are usually photos
-                  isHero={true}
+                  category="Hero"
+                  isHero={true} // Keep for now if component uses it for sizing etc
                   onUploadComplete={fetchData}
                 />
               </section>

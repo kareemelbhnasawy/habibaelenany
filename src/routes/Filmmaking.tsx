@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useLightbox } from "../components/LightboxProvider";
 import { useMedia } from "../hooks/useContent";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 import type { MediaItem as DBMediaItem } from "../types/database"; // Rename for clarity
 
 interface LocalMediaItem extends DBMediaItem {
@@ -23,10 +24,12 @@ function SectionContainer({
   section,
   sectionIndex,
   allItems,
+  speedMs = 800,
 }: {
   section: Section;
   sectionIndex: number;
   allItems: LocalMediaItem[];
+  speedMs?: number;
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
@@ -67,10 +70,10 @@ function SectionContainer({
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % section.items.length);
-    }, 800); // Change image every 800ms
+    }, speedMs); // Change image every 800ms
 
     return () => clearInterval(interval);
-  }, [isInView, section.items.length]);
+  }, [isInView, section.items.length, speedMs]);
 
   const handleClick = () => {
     const globalIndex = allItems.findIndex(
@@ -136,6 +139,7 @@ function SectionContainer({
 
 export function Filmmaking() {
   const { items: allItemsData, loading } = useMedia({ category: "Filmmaking" });
+  const { generalConfig, sectionOrder } = useSiteSettings();
 
   const sections = useMemo(() => {
     // Metadata only - Order comes from DB
@@ -158,7 +162,7 @@ export function Filmmaking() {
       map.get(title)!.push(item);
     });
 
-    return Array.from(map.entries()).map(([title, items]) => ({
+    const grouped = Array.from(map.entries()).map(([title, items]) => ({
       title,
       description: sectionMetadata[title] || "Filmmaking collection",
       items: items.map(
@@ -176,7 +180,26 @@ export function Filmmaking() {
         })
       ),
     }));
-  }, [allItemsData]);
+
+    // Sort by custom order
+    const order = sectionOrder?.Filmmaking || [];
+    if (order.length > 0) {
+      grouped.sort((a, b) => {
+        const indexA = order.indexOf(a.title);
+        const indexB = order.indexOf(b.title);
+        // If both found, sort by index
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        // If only A found, A comes first
+        if (indexA !== -1) return -1;
+        // If only B found, B comes first
+        if (indexB !== -1) return 1;
+        // If neither found, keep original order (or alphabetical?)
+        return 0; // Keep implicit order
+      });
+    }
+
+    return grouped;
+  }, [allItemsData, sectionOrder]);
 
   // Flatten for Lightbox
   const allItems = sections.flatMap((s) => s.items);
@@ -215,6 +238,7 @@ export function Filmmaking() {
                 section={section}
                 sectionIndex={index}
                 allItems={allItems}
+                speedMs={generalConfig.filmmaking_speed_ms}
               />
             </div>
           ))}

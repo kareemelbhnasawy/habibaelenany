@@ -27,7 +27,7 @@ const navItems = [
     href: "/admin/testimonials",
     icon: MessageSquareQuote,
   },
-  { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Settings", href: "/admin/general-settings", icon: Settings },
   { label: "Migration", href: "/admin/migration", icon: Database },
 ];
 

@@ -14,8 +14,6 @@ export const siteConfig = {
       { href: "/photography", label: "Photography" },
       { href: "/filmmaking", label: "Filmmaking" },
       { href: "/short-form", label: "Short Form" },
-      { href: "/about", label: "About" },
-      { href: "/contact", label: "Contact" },
     ],
   },
   socials: {

@@ -1,94 +1,91 @@
-// import { Instagram, Linkedin } from 'lucide-react';
 import { Link } from "react-router-dom";
-import { Lock } from "lucide-react";
+import { Lock, Instagram, Linkedin, Mail, Globe } from "lucide-react";
 import { siteConfig } from "../lib/siteConfig";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { generalConfig, siteInfo, contactInfo } = useSiteSettings();
 
   return (
-    <footer className="bg-paper border-t border-ink/5">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="text-center">
+    <footer className="bg-paper border-t border-ink/5 pt-12 md:pt-16 pb-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Dynamic Footer Image Section */}
+        {generalConfig.footer_image_url && (
+          <div className="w-full max-w-lg mx-auto mb-12">
+            <img
+              src={generalConfig.footer_image_url}
+              alt="Let's Create Something Together"
+              className="w-full h-auto object-contain rounded-lg shadow-sm"
+            />
+          </div>
+        )}
+
+        <div className="text-center space-y-6">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-display font-semibold tracking-tight mb-4">
-              HABIBA EL ENANY
+            <h3 className="text-xl font-display font-semibold tracking-tight mb-2 uppercase">
+              {siteInfo.title || "HABIBA EL ENANY"}
             </h3>
             <p className="text-sm text-muted max-w-xl mx-auto">
-              {siteConfig.photographer.tagline}
+              {siteInfo.description ||
+                siteInfo.bio ||
+                siteConfig.photographer.tagline}
             </p>
           </div>
 
-          {/* Quick Links */}
-          {/* <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase tracking-wide">
-              Quick Links
-            </h4>
-            <nav className="space-y-2">
-              {siteConfig.nav.links.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="block text-sm text-muted hover:text-accent transition-colors focus-ring"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div> */}
-
-          {/* Contact & Social */}
-          {/* <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase tracking-wide">
-              Connect
-            </h4>
-            <div className="space-y-3">
+          {/* Social Links */}
+          <div className="flex items-center justify-center gap-6">
+            {contactInfo.instagram && (
               <a
-                href={`mailto:${siteConfig.contact.email}`}
-                className="block text-sm text-muted hover:text-accent transition-colors focus-ring rounded"
+                href={contactInfo.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink/60 hover:text-accent transition-colors"
+                aria-label="Instagram"
               >
-                {siteConfig.contact.email}
+                <Instagram size={20} />
               </a>
-              <div className="flex gap-4 pt-2">
-                <a
-                  href={siteConfig.contact.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted hover:text-accent transition-colors focus-ring rounded p-1"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a
-                  href={siteConfig.contact.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted hover:text-accent transition-colors focus-ring rounded p-1"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href={siteConfig.contact.behance}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted hover:text-accent transition-colors focus-ring rounded p-1"
-                  aria-label="Behance"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988h-6.466v-14.967h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zm-3.466-8.988h3.584c2.508 0 2.906-3-.312-3h-3.272v3zm3.391 3h-3.391v3.016h3.341c3.055 0 2.868-3.016.05-3.016z" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div> */}
+            )}
+            {contactInfo.linkedin && (
+              <a
+                href={contactInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink/60 hover:text-accent transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </a>
+            )}
+            {contactInfo.behance && (
+              <a
+                href={contactInfo.behance}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink/60 hover:text-accent transition-colors"
+                aria-label="Behance"
+              >
+                <Globe size={20} />
+              </a>
+            )}
+            {contactInfo.email && (
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="text-ink/60 hover:text-accent transition-colors"
+                aria-label="Email"
+              >
+                <Mail size={20} />
+              </a>
+            )}
+          </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-ink/5 text-center flex items-center justify-center gap-2">
+        <div className="pt-8 border-t border-ink/5 text-center flex items-center justify-center gap-2">
           <p className="text-sm text-muted">
-            &copy; {currentYear} {siteConfig.title}. All rights reserved.
+            &copy; {currentYear} {siteInfo.title || siteConfig.title}. All
+            rights reserved.
           </p>
           <Link
             to="/admin"

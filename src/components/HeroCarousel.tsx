@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMedia } from "../hooks/useContent";
 
 export function HeroCarousel() {
-  const { items } = useMedia({ isHero: true });
+  // Use the new "Hero" category instead of isHero flag
+  const { items } = useMedia({ category: "Hero" });
   const heroImages = items.map((item) => item.url);
   const [currentIndex, setCurrentIndex] = useState(0);
 

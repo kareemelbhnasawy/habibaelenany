@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { Play, X } from "lucide-react";
 import { useMedia } from "../hooks/useContent";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 
 // Video lightbox modal component
 function VideoLightbox({
@@ -172,6 +173,7 @@ function LazyVideoPreview({
 export function ShortForm() {
   const [lightboxVideo, setLightboxVideo] = useState<string | null>(null);
   const { items, loading } = useMedia({ category: "Short Form" });
+  const { sectionOrder } = useSiteSettings();
 
   // Fix iOS scroll issues at edges
   useEffect(() => {
@@ -256,6 +258,19 @@ export function ShortForm() {
               }
               sections[title].push(item);
             });
+
+            // Sort by custom order
+            const order = sectionOrder?.["Short Form"] || [];
+            if (order.length > 0) {
+              sectionKeys.sort((a, b) => {
+                const indexA = order.indexOf(a);
+                const indexB = order.indexOf(b);
+                if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                if (indexA !== -1) return -1;
+                if (indexB !== -1) return 1;
+                return 0;
+              });
+            }
 
             return sectionKeys.map((title, sectionIndex) => {
               const sectionItems = sections[title];

@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { siteConfig } from "../lib/siteConfig";
 import { cn } from "../utils/cn";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { siteInfo } = useSiteSettings();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,11 +65,11 @@ export function Navbar() {
             className="flex flex-col items-start outline-none"
             aria-label="Home"
           >
-            <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none">
-              HABIBA EL ENANY
+            <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight leading-none uppercase">
+              {siteInfo.title || "HABIBA EL ENANY"}
             </h1>
             <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] uppercase font-light self-center ">
-              PORTOFOLIO
+              {siteInfo.description || "PORTFOLIO"}
             </span>
           </Link>
 

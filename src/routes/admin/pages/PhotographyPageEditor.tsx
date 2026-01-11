@@ -4,10 +4,14 @@ import { MediaGrid } from "../../../components/admin/shared/MediaGrid";
 import { MediaUploader } from "../../../components/admin/shared/MediaUploader";
 import type { MediaItem } from "../../../types/database";
 import { getReorderedUpdates } from "../../../utils/sort";
-import { Loader2, Plus, Filter } from "lucide-react";
+import { Loader2, Plus, Filter, List } from "lucide-react";
 import { EditMediaModal } from "../../../components/admin/shared/EditMediaModal";
+import { SectionOrderModal } from "../../../components/admin/shared/SectionOrderModal";
+
+import { useSiteSettings } from "../../../hooks/useSiteSettings";
 
 export function PhotographyPageEditor() {
+  const { sectionOrder } = useSiteSettings();
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<MediaItem[]>([]);
   const [sections, setSections] = useState<string[]>([]);
@@ -19,10 +23,11 @@ export function PhotographyPageEditor() {
 
   const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [sectionOrder]);
 
   async function fetchData() {
     setLoading(true);
@@ -42,7 +47,19 @@ export function PhotographyPageEditor() {
       const uniqueSections = Array.from(
         new Set(data?.map((i) => i.section).filter(Boolean) as string[])
       );
-      setSections(uniqueSections.sort());
+
+      // Sort according to site settings
+      const order = sectionOrder?.Photography || [];
+      uniqueSections.sort((a, b) => {
+        const indexA = order.indexOf(a);
+        const indexB = order.indexOf(b);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.localeCompare(b);
+      });
+
+      setSections(uniqueSections);
     } catch (error) {
       console.error("Error fetching photography data", error);
     } finally {
@@ -164,12 +181,20 @@ export function PhotographyPageEditor() {
 
         {/* Add Section Button (Simple UI to switch to specific upload mode logic effectively) */}
         {!isCreatingSection ? (
-          <button
-            onClick={() => setIsCreatingSection(true)}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 transition-colors"
-          >
-            <Plus size={14} /> New Section
-          </button>
+          <>
+            <button
+              onClick={() => setIsCreatingSection(true)}
+              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 transition-colors"
+            >
+              <Plus size={14} /> New Section
+            </button>
+            <button
+              onClick={() => setIsOrderModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-400 hover:text-white bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <List size={14} /> Reorder
+            </button>
+          </>
         ) : (
           <div className="ml-auto flex gap-2">
             <input
@@ -290,6 +315,16 @@ export function PhotographyPageEditor() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onUpdate={fetchData}
+      />
+
+      <SectionOrderModal
+        isOpen={isOrderModalOpen}
+        onClose={() => {
+          setIsOrderModalOpen(false);
+          fetchData();
+        }}
+        category="Photography"
+        existingSections={sections}
       />
     </div>
   );

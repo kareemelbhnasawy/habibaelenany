@@ -10,8 +10,11 @@ import { ParallaxSection } from "../components/ParallaxSection";
 import { ScrollReveal } from "../components/ScrollReveal";
 import { siteConfig } from "../lib/siteConfig";
 import { TestimonialsCarousel } from "../components/TestimonialsCarousel";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 
 export function Home() {
+  const { generalConfig } = useSiteSettings();
+
   return (
     <main>
       {/* Hero Full-Screen Section */}
@@ -37,11 +40,11 @@ export function Home() {
                 className="text-white"
               >
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-semibold mb-6 text-balance leading-tight drop-shadow-lg">
-                  {siteConfig.photographer.tagline}
+                  {generalConfig.hero_title || siteConfig.photographer.tagline}
                 </h1>
 
                 <p className="text-base md:text-lg lg:text-xl text-white/90 mb-8 leading-relaxed max-w-2xl drop-shadow-md">
-                  {siteConfig.photographer.bio}
+                  {generalConfig.hero_subtitle || siteConfig.photographer.bio}
                 </p>
 
                 {/* Divider Line */}
@@ -138,7 +141,10 @@ export function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80"
+            src={
+              generalConfig.footer_image_url ||
+              "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80"
+            }
             alt="Photography background"
             className="w-full h-full object-cover"
             style={{ objectPosition: "60% center" }}
@@ -159,10 +165,10 @@ export function Home() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-6 text-white">
-                {siteConfig.cta.headline}
+                {generalConfig.cta_title || siteConfig.cta.headline}
               </h2>
               <p className="text-lg md:text-xl mb-8 text-white/90">
-                {siteConfig.cta.subtext}
+                {generalConfig.cta_subtitle || siteConfig.cta.subtext}
               </p>
               <a
                 href="https://wa.me/201010302994?text=Hi%20Habiba!%20Im%20interested%20in%20working%20together%F0%9F%A4%8D"
