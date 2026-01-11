@@ -4,7 +4,7 @@ import { supabase } from "../../../lib/supabase";
 
 interface MediaUploaderProps {
   onUploadComplete: () => void;
-  category: "Photography" | "Filmmaking" | "Short Form";
+  category: "Photography" | "Filmmaking" | "Short Form" | "Hero";
   section?: string;
   isHero?: boolean;
 }

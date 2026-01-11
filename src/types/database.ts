@@ -5,7 +5,7 @@ export interface MediaItem {
   width: number;
   height: number;
   type: "image" | "video";
-  category: "Photography" | "Filmmaking" | "Short Form";
+  category: "Photography" | "Filmmaking" | "Short Form" | "Hero";
   section: string;
   title: string | null;
   description: string | null;

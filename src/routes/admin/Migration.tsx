@@ -31,8 +31,12 @@ export function Migration() {
         addLog(`[${count}/${total}] Processing ${filename}...`);
 
         // Determine Metadata based on path
-        let category: "Photography" | "Filmmaking" | "Short Form" | string =
-          "Uncategorized";
+        let category:
+          | "Photography"
+          | "Filmmaking"
+          | "Short Form"
+          | "Hero"
+          | string = "Uncategorized";
         let section: string | undefined = undefined;
         let isHero = false;
         let type: "image" | "video" = "image";
