@@ -160,7 +160,10 @@ function AnimatedRoutes() {
   );
 }
 
+import { useImageSecurity } from "./hooks/useImageSecurity";
+
 function App() {
+  useImageSecurity();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

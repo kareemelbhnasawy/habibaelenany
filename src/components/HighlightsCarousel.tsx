@@ -90,7 +90,7 @@ export function HighlightsCarousel() {
                   <img
                     src={photo.src}
                     alt={photo.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105 protected-media"
                     loading="lazy"
                   />
 

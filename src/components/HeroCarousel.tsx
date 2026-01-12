@@ -50,7 +50,7 @@ export function HeroCarousel() {
             <img
               src={heroImages[currentIndex]}
               alt={`Hero image ${currentIndex + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover protected-media"
               // Ensure critical loading for the first image
               loading={currentIndex === 0 ? "eager" : "lazy"}
               style={{ objectPosition: "center 40%" }} // Adjusted to focus slightly higher

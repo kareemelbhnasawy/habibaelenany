@@ -107,7 +107,7 @@ export function TestimonialsCarousel() {
                       <img
                         src={testimonial.avatar_url}
                         alt={testimonial.name}
-                        className="w-12 h-12 md:w-14 md:h-14 object-cover rounded-full"
+                        className="w-12 h-12 md:w-14 md:h-14 object-cover rounded-full protected-media"
                         loading="lazy"
                       />
                     ) : (

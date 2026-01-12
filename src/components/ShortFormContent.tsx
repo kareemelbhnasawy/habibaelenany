@@ -43,7 +43,7 @@ export function ShortFormContent() {
               <img
                 src={item.src}
                 alt={item.alt}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105 protected-media"
                 loading="lazy"
               />
               {/* Text overlay - always visible */}

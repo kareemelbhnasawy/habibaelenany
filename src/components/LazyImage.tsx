@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ImageSkeleton } from './ImageSkeleton';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ImageSkeleton } from "./ImageSkeleton";
 
 interface LazyImageProps {
   src: string;
@@ -14,10 +14,10 @@ interface LazyImageProps {
 export function LazyImage({
   src,
   alt,
-  className = '',
-  aspectRatio = 'aspect-[3/4]',
+  className = "",
+  aspectRatio = "aspect-[3/4]",
   onLoad,
-  priority = false
+  priority = false,
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -66,11 +66,11 @@ export function LazyImage({
         <motion.img
           src={src}
           alt={alt}
-          className={className}
+          className={`${className} protected-media`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoaded ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          loading={priority ? 'eager' : 'lazy'}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          loading={priority ? "eager" : "lazy"}
         />
       )}
     </div>
